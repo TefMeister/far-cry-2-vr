@@ -20,14 +20,18 @@ This repository will hold **only files we create** for the mod. No game files
 are included, and none ever will be — the mod requires you to own a legitimate
 copy of Far Cry 2 and redistributes no original assets.
 
-## Related repositories
+## The five repositories for Far Cry 2 VR
 
-- **[far-cry-2-vr-engine-research](https://github.com/TefMeister/far-cry-2-vr-engine-research)**
-  — the engine dossier + reusable VR RE playbook (current-truth reference).
-- **[far-cry-2-vr-dev-archive](https://github.com/TefMeister/far-cry-2-vr-dev-archive)**
-  — the full, messy development history: snapshots, probes, raw recon.
-- **[far-cry-2-vr-modding-notes](https://github.com/TefMeister/far-cry-2-vr-modding-notes)**
-  — readable trial-and-error field notes / progress ledger.
+Everything for this game lives in five repositories, each with one job — so you
+always know where to look. You are in **far-cry-2-vr-mod**.
+
+| Repository | What lives here |
+| --- | --- |
+| **far-cry-2-vr-mod** ← you are here | The mod itself — the Far Cry 2 (Dunia engine) VR mod (pre-release; RE in progress). |
+| [far-cry-2-vr-dev-archive](https://github.com/TefMeister/far-cry-2-vr-dev-archive) | Full development history — snapshots, probes, dead ends, raw recon. |
+| [far-cry-2-vr-modding-notes](https://github.com/TefMeister/far-cry-2-vr-modding-notes) | Readable field notes / progress ledger. |
+| [far-cry-2-vr-staging](https://github.com/TefMeister/far-cry-2-vr-staging) 🔒 | **Private** — unverified WIP builds, cross-machine handoff. |
+| [far-cry-2-vr-engine-research](https://github.com/TefMeister/far-cry-2-vr-engine-research) | Distilled engine reference (dossier) + reusable VR RE playbook. |
 
 ## Credits
 
