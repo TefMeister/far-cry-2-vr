@@ -60,3 +60,10 @@ Non-commercial fan reverse-engineering for a personal VR mod. Requires a
 legitimately owned copy of Far Cry 2. **No original game files or assets are
 included in this repository** — only interface metadata and notes we generated
 ourselves.
+
+## Contributing & policy
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) — how we credit and link sources, our
+**study-everything-public but write-our-own-code** rule (we copy no one else's
+source code or files, any license or price), the terms for reusing our work
+(free, with credit), and how to request a correction or removal.
