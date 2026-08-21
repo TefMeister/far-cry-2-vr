@@ -17,6 +17,10 @@ interface metadata, and our own code/notes.
 - **`recon/2026-08-21-phase0-static/`** — first static-analysis pass over the
   shipped binaries (PE headers, imports/exports, middleware string mining,
   render config). Method notes + machine-readable dumps.
+- **`recon/2026-08-21-phase1-camera-struct/`** — disassembly of the
+  `FCE_Camera_*` exports that recovered the engine camera struct (position, FOV,
+  basis vectors, angles) and its singleton global. Findings write-up + raw
+  capstone disassembly.
 
 ## Legal
 
