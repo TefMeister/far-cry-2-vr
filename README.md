@@ -43,3 +43,10 @@ always know where to look. You are in **far-cry-2-vr-dev-archive**.
 
 Non-commercial fan reverse-engineering for a personal VR mod; requires a
 legitimately owned copy of Far Cry 2. No original assets redistributed.
+
+## Contributing & policy
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) — how we credit and link sources, our
+**study-everything-public but write-our-own-code** rule (we copy no one else's
+source code or files, any license or price), the terms for reusing our work
+(free, with credit), and how to request a correction or removal.
