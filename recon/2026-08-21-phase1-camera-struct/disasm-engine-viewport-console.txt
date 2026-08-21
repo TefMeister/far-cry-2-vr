@@ -1,0 +1,154 @@
+Dunia.dll engine/viewport/console disassembly (ImageBase 0x10000000)
+
+Key globals found:
+  0x11606280 (rva 0x1606280) : console/UI manager; byte [+0x69] = console-open flag
+  0x11609560 (rva 0x1609560) : view/viewport object; [+0x20]=width, [+0x24]=height
+  0x103f8ab0                 : viewport-change observer dispatcher (pub/sub, stride 0x14, calls vtable+4)
+  0x1164d594                 : world/time manager (GetTimeOfDay uses +0xc8)
+
+===== FCE_Engine_UpdateViewport @ 0x1088b920 =====
+  1088b920  mov     eax, dword ptr [0x11609560]
+  1088b925  mov     ecx, dword ptr [esp + 4]
+  1088b929  mov     dword ptr [eax + 0x20], ecx
+  1088b92c  mov     edx, dword ptr [0x11609560]
+  1088b932  mov     eax, dword ptr [esp + 8]
+  1088b936  mov     dword ptr [edx + 0x24], eax
+  1088b939  mov     ecx, dword ptr [0x11609560]
+  1088b93f  jmp     0x103f8ab0
+  1088b944  int3    
+  1088b945  int3    
+  1088b946  int3    
+  1088b947  int3    
+  1088b948  int3    
+  1088b949  int3    
+  1088b94a  int3    
+  1088b94b  int3    
+  1088b94c  int3    
+  1088b94d  int3    
+  1088b94e  int3    
+  1088b94f  int3    
+  1088b950  mov     eax, dword ptr [esp + 4]
+  1088b954  mov     ecx, dword ptr [0x1160628c]
+  1088b95a  push    eax
+  1088b95b  call    0x10298140
+  1088b960  ret     
+
+===== FCE_Engine_IsConsoleOpen @ 0x1088d420 =====
+  1088d420  mov     eax, dword ptr [0x11606280]
+  1088d425  mov     al, byte ptr [eax + 0x69]
+  1088d428  ret     
+
+===== viewport_change_dispatcher_0x103f8ab0 @ 0x103f8ab0 =====
+  103f8ab0  push    ebx
+  103f8ab1  push    ebp
+  103f8ab2  push    esi
+  103f8ab3  mov     esi, ecx
+  103f8ab5  mov     ebp, 1
+  103f8aba  add     dword ptr [esi + 0x86c], ebp
+  103f8ac0  mov     eax, dword ptr [esi + 0x874]
+  103f8ac6  push    edi
+  103f8ac7  mov     edi, dword ptr [esi + 0x870]
+  103f8acd  lea     eax, [eax + eax*4]
+  103f8ad0  mov     ecx, edi
+  103f8ad2  lea     ebx, [ecx + eax*4]
+  103f8ad5  cmp     edi, ebx
+  103f8ad7  je      0x103f8af0
+  103f8ad9  lea     esp, [esp]
+  103f8ae0  mov     edx, dword ptr [edi]
+  103f8ae2  mov     eax, dword ptr [edx + 4]
+  103f8ae5  mov     ecx, edi
+  103f8ae7  call    eax
+  103f8ae9  add     edi, 0x14
+  103f8aec  cmp     edi, ebx
+  103f8aee  jne     0x103f8ae0
+  103f8af0  or      ecx, 0xffffffff
+  103f8af3  add     dword ptr [esi + 0x86c], ecx
+  103f8af9  add     dword ptr [esi + 0x83c], ebp
+  103f8aff  mov     eax, dword ptr [esi + 0x844]
+  103f8b05  mov     edi, dword ptr [esi + 0x840]
+  103f8b0b  lea     edx, [eax + eax*4]
+  103f8b0e  mov     eax, edi
+  103f8b10  lea     ebx, [eax + edx*4]
+  103f8b13  cmp     edi, ebx
+  103f8b15  je      0x103f8b2a
+  103f8b17  mov     edx, dword ptr [edi]
+  103f8b19  mov     eax, dword ptr [edx + 4]
+  103f8b1c  mov     ecx, edi
+  103f8b1e  call    eax
+  103f8b20  add     edi, 0x14
+  103f8b23  cmp     edi, ebx
+  103f8b25  jne     0x103f8b17
+  103f8b27  or      ecx, 0xffffffff
+  103f8b2a  add     dword ptr [esi + 0x83c], ecx
+  103f8b30  add     dword ptr [esi + 0x84c], ebp
+  103f8b36  mov     eax, dword ptr [esi + 0x854]
+  103f8b3c  mov     edi, dword ptr [esi + 0x850]
+  103f8b42  lea     edx, [eax + eax*4]
+  103f8b45  mov     eax, edi
+  103f8b47  lea     ebx, [eax + edx*4]
+  103f8b4a  cmp     edi, ebx
+  103f8b4c  je      0x103f8b63
+  103f8b4e  mov     edi, edi
+  103f8b50  mov     edx, dword ptr [edi]
+  103f8b52  mov     eax, dword ptr [edx + 4]
+  103f8b55  mov     ecx, edi
+  103f8b57  call    eax
+  103f8b59  add     edi, 0x14
+  103f8b5c  cmp     edi, ebx
+  103f8b5e  jne     0x103f8b50
+  103f8b60  or      ecx, 0xffffffff
+  103f8b63  add     dword ptr [esi + 0x84c], ecx
+  103f8b69  add     dword ptr [esi + 0x85c], ebp
+
+===== FCE_Core_GetAxisFromAngles @ 0x108907f0 =====
+  108907f0  push    ebp
+  108907f1  mov     ebp, esp
+  108907f3  and     esp, 0xfffffff0
+  108907f6  sub     esp, 0x60
+  108907f9  movss   xmm0, dword ptr [ebp + 8]
+  108907fe  movss   dword ptr [esp + 0x14], xmm0
+  10890804  movss   xmm0, dword ptr [ebp + 0xc]
+  10890809  lea     eax, [esp + 8]
+  1089080d  movss   dword ptr [esp + 0x18], xmm0
+  10890813  movss   xmm0, dword ptr [ebp + 0x10]
+  10890818  push    eax
+  10890819  lea     ecx, [esp + 0x18]
+  1089081d  movss   dword ptr [esp + 0x20], xmm0
+  10890823  xorps   xmm0, xmm0
+  10890826  push    ecx
+  10890827  lea     ecx, [esp + 0x28]
+  1089082b  movss   dword ptr [esp + 0x10], xmm0
+  10890831  movss   dword ptr [esp + 0x14], xmm0
+  10890837  movss   dword ptr [esp + 0x18], xmm0
+  1089083d  call    0x10050990
+  10890842  mov     edx, dword ptr [ebp + 0x14]
+  10890845  movss   xmm0, dword ptr [esp + 0x20]
+  1089084b  mov     eax, dword ptr [ebp + 0x18]
+  1089084e  mov     ecx, dword ptr [ebp + 0x1c]
+  10890851  movss   dword ptr [edx], xmm0
+  10890855  movss   xmm0, dword ptr [esp + 0x24]
+  1089085b  mov     edx, dword ptr [ebp + 0x20]
+  1089085e  movss   dword ptr [eax], xmm0
+  10890862  movss   xmm0, dword ptr [esp + 0x28]
+  10890868  mov     eax, dword ptr [ebp + 0x24]
+  1089086b  movss   dword ptr [ecx], xmm0
+  1089086f  movss   xmm0, dword ptr [esp + 0x30]
+  10890875  mov     ecx, dword ptr [ebp + 0x28]
+  10890878  movss   dword ptr [edx], xmm0
+  1089087c  movss   xmm0, dword ptr [esp + 0x34]
+  10890882  mov     edx, dword ptr [ebp + 0x2c]
+  10890885  movss   dword ptr [eax], xmm0
+  10890889  movss   xmm0, dword ptr [esp + 0x38]
+  1089088f  mov     eax, dword ptr [ebp + 0x30]
+  10890892  movss   dword ptr [ecx], xmm0
+  10890896  movss   xmm0, dword ptr [esp + 0x40]
+  1089089c  mov     ecx, dword ptr [ebp + 0x34]
+  1089089f  movss   dword ptr [edx], xmm0
+  108908a3  movss   xmm0, dword ptr [esp + 0x44]
+  108908a9  movss   dword ptr [eax], xmm0
+  108908ad  movss   xmm0, dword ptr [esp + 0x48]
+  108908b3  movss   dword ptr [ecx], xmm0
+  108908b7  mov     esp, ebp
+  108908b9  pop     ebp
+  108908ba  ret     
+
