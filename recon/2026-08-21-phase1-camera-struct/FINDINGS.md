@@ -72,8 +72,28 @@ Whether `0x1164FE7C` is populated and drives rendering during real gameplay
 `-staging` includes a read-only `camera_probe` thread that logs this exact
 pointer + fields once a second, precisely to settle it.
 
+## Follow-on: engine / viewport / console globals
+
+Disassembling more `FCE_Engine_*` / `FCE_Core_*` exports turned up several more
+useful globals (raw disassembly in `disasm-engine-viewport-console.txt`):
+
+- **Console exists.** `FCE_Engine_IsConsoleOpen` = `return *(uint8_t*)(
+  *(void**)0x11606280 + 0x69)`. So `0x11606280` (RVA `0x1606280`) is the
+  console/UI manager and `+0x69` is its open flag. Good Phase-2 harness lever.
+- **View/viewport object** at `0x11609560` (RVA `0x1609560`):
+  `FCE_Engine_UpdateViewport` writes width→`+0x20`, height→`+0x24`, then calls
+  `0x103f8ab0`.
+- **`0x103f8ab0` is an observer dispatcher**, not the projection math: it walks
+  listener arrays (element stride `0x14`) and calls `vtable+4` on each — a
+  "viewport changed" notification fan-out. The projection rebuild is inside one
+  of those callbacks; find it dynamically once hooked.
+- **Angle→basis** conversion: `FCE_Core_GetAxisFromAngles` (helper `0x10050990`)
+  — the rotation-convention reference for building per-eye view matrices later.
+- **World/time manager** at `0x1164d594` (`GetTimeOfDay` uses `+0xc8`).
+
 ## Artifacts
 
-- `disasm-fce-camera.txt` — the raw capstone disassembly of the accessors.
+- `disasm-fce-camera.txt` — raw capstone disassembly of the camera accessors.
+- `disasm-engine-viewport-console.txt` — engine/viewport/console disassembly.
 - Camera offsets are encoded as C macros in
   `-staging/proxy-winmm/src/camera.h`.
