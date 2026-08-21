@@ -1,24 +1,79 @@
 # Far Cry 2 VR
 
 A work-in-progress **VR support mod for Far Cry 2** (2008, Ubisoft Montreal —
-**Dunia Engine**).
+**Dunia Engine**), aiming at full stereo rendering with head tracking in a PC VR
+headset via SteamVR.
 
-> **This is not playable yet.** There is no release. Until you see a tagged
-> release here that explicitly says it runs in a VR headset, treat this as
-> developer work-in-progress, not something to play.
+## ⚠️ What this mod is — and what it is not
 
-**Status: pre-planning / reverse-engineering — not VR-ready.** No playable
-release yet, and no mod code written yet. The project is currently at **Phase 0**
-of the VR playbook: static reconnaissance of the engine. What we know so far —
-Far Cry 2 runs a 32-bit **Direct3D 9** Dunia engine entirely inside `Dunia.dll`,
-loaded by a thin `FarCry2.exe` launcher — is written up in the engine-research
-repo. The near-term goal is the usual foundation: get our own code running in the
-process, hook the renderer, and locate the camera matrices; stereo and head
-tracking come after that.
+**What it is (v0.1.x):** a developer alpha that proves the two hard parts work:
 
-This repository will hold **only files we create** for the mod. No game files
-are included, and none ever will be — the mod requires you to own a legitimate
-copy of Far Cry 2 and redistributes no original assets.
+- **We control the game camera.** The mod intercepts the engine's camera
+  matrices on the render path and can move the eye point per frame (visible as
+  stereo "wiggle" test modes on the flat monitor).
+- **The game reaches SteamVR.** The mod captures each rendered frame and
+  submits it to the SteamVR compositor from inside the 32-bit game process, so
+  the game screen appears in a connected headset.
+
+**What it is NOT (yet):**
+
+- It is **not stereoscopic 3D in the headset** — the headset currently shows
+  the same flat image to both eyes (mono), stretched across each eye's view.
+- It has **no head tracking** — moving your head does not move the in-game
+  camera yet.
+- It is **not a finished, playable VR experience**, and it does not change the
+  game's controls, HUD, or comfort options in any way.
+
+## 🤢 Caution: unfinished — may cause severe motion sickness
+
+This mod is **unfinished** and in active development. Using it in a headset may
+cause **severe motion sickness and discomfort**: the image is un-tracked (it
+does not respond to your head), monoscopic, and stretched. Try it seated, take
+it off at the first sign of discomfort, and treat every release as an
+experiment until this caution is removed.
+
+## Requirements
+
+- A legitimate copy of **Far Cry 2** (tested: Steam build, patch 1.03).
+  This mod contains and redistributes **no game files**.
+- **SteamVR** and a PC VR headset (tested target: Quest 3 via Virtual Desktop).
+- Windows 10/11.
+
+## Install
+
+1. Download the latest release ZIP from this repository's Releases page.
+2. Copy `winmm.dll` and `openvr_api.dll` into the game's `bin` folder
+   (next to `FarCry2.exe`), e.g.
+   `...\Steam\steamapps\common\Far Cry 2\bin\`.
+3. Start SteamVR.
+4. **Launch `bin\FarCry2.exe` directly** (not through the Steam library — with
+   SteamVR running, Steam's Desktop Game Theatre can hang the launch on the
+   "Launching…" popup).
+5. In the main menu or in game, press **F10**.
+
+**Uninstall:** delete the two DLLs from the `bin` folder. The game is untouched
+otherwise.
+
+## Hotkeys
+
+| Key | Action |
+|---|---|
+| **F10** | Toggle the SteamVR bridge (game screen in the headset) |
+| **F5** | Toggle the stereo camera override (flat-monitor test) |
+| **F6 / F7** | Decrease / increase eye separation |
+| **F8** | Cycle eye mode: wiggle → left → right |
+| **F9** | Experimental: also offset rigid view matrices |
+
+Diagnostics are logged to `%LOCALAPPDATA%\FC2VR\fc2vr.log`.
+
+## How it works (short version)
+
+The mod is a `winmm.dll` proxy that loads inside the game, hooks the Direct3D 9
+device, classifies the engine's shader-constant matrix uploads to find the
+real camera every frame, and rewrites those uploads to move the eye. For the
+headset path it copies the rendered backbuffer into a Direct3D 11 texture and
+submits it to the SteamVR compositor through the OpenVR API. Full technical
+detail lives in the sibling repositories below.
 
 ## The five repositories for Far Cry 2 VR
 
@@ -27,28 +82,36 @@ always know where to look. You are in **far-cry-2-vr-mod**.
 
 | Repository | What lives here |
 | --- | --- |
-| **far-cry-2-vr-mod** ← you are here | The mod itself — the Far Cry 2 (Dunia engine) VR mod (pre-release; RE in progress). |
+| **far-cry-2-vr-mod** ← you are here | The mod itself — releases and install instructions. |
 | [far-cry-2-vr-dev-archive](https://github.com/TefMeister/far-cry-2-vr-dev-archive) | Full development history — snapshots, probes, dead ends, raw recon. |
 | [far-cry-2-vr-modding-notes](https://github.com/TefMeister/far-cry-2-vr-modding-notes) | Readable field notes / progress ledger. |
 | [far-cry-2-vr-staging](https://github.com/TefMeister/far-cry-2-vr-staging) 🔒 | **Private** — unverified WIP builds, cross-machine handoff. |
 | [far-cry-2-vr-engine-research](https://github.com/TefMeister/far-cry-2-vr-engine-research) | Distilled engine reference (dossier) + reusable VR RE playbook. |
 
+## Third-party components
+
+- **MinHook** by Tsuda Kageyu and contributors (BSD-2-Clause) — function hooking.
+- **OpenVR API** by Valve (BSD-3-Clause) — SteamVR interface; `openvr_api.dll`
+  is redistributed in releases under its license.
+
+License texts are included with every release. Everything **we** wrote is free
+to use and modify with credit — see [CONTRIBUTING.md](CONTRIBUTING.md).
+
 ## Credits
 
-This mod stands on community reverse-engineering of the Far Cry / Dunia engine
-and on open-source modding tools. Full credits will be maintained here as the
-project takes shape. If you should be credited and aren't, email
-**td3kxlvr@proton.me** and we'll fix it ASAP. We honour correction and removal
-requests from the rights holders of anything used.
-
-## Legal
-
-Non-commercial fan mod. Requires a legitimately owned copy of Far Cry 2.
-Redistributes no original game assets.
+See [CREDITS.md](CREDITS.md) — this project stands on community
+reverse-engineering and open-source tools, and we credit everyone, including
+inspirations. If you should be credited and aren't, open a GitHub issue and we
+will fix it as soon as possible.
 
 ## Contributing & policy
 
-See [CONTRIBUTING.md](CONTRIBUTING.md) — how we credit and link sources, our
-**study-everything-public but write-our-own-code** rule (we copy no one else's
-source code or files, any license or price), the terms for reusing our work
-(free, with credit), and how to request a correction or removal.
+See [CONTRIBUTING.md](CONTRIBUTING.md) for the project's rules: study-not-copy,
+no game assets ever, credit everyone, and a no-questions removal policy for
+rights holders.
+
+## Legal
+
+This is a non-commercial fan mod. It requires owning a legitimate copy of
+Far Cry 2, includes no original game assets, and redistributes none. All rights
+to Far Cry 2 and the Dunia Engine belong to Ubisoft.
