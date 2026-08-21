@@ -22,6 +22,10 @@ For releases (none yet), see
   — recovered the full camera struct statically (position/FOV/basis/angles via
   the `FCE_Camera_*` accessors), and built a compile-verified 32-bit `winmm.dll`
   proxy with a read-only camera probe. Not yet run in-game.
+- **[2026-08-21 — First live debug: the editor API is a dead end](2026-08-21-phase1-live-debug-editor-api-dead-end.md)**
+  — ran the proxy in-game (foothold works!) and attached a debugger: the FCE
+  editor camera/globals are all null during real gameplay. The game camera is a
+  different class. Next: hook Direct3D 9 to get the real camera.
 
 ## Legal
 
