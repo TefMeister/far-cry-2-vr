@@ -5,12 +5,14 @@
 > `-dev-archive` / `-modding-notes` repos; this file is the *distilled current
 > truth*. Update it whenever a fact changes; correct false leads in place.
 
-**Status:** Phase 1 — foothold built (compile-verified winmm proxy; not yet run
-in-game). Camera struct recovered *statically*. · **VR-readiness verdict:** TBD,
-trending feasible — in-process x86 engine, D3D9 renderer, and a fully-mapped
-camera object located via the editor C-API. Blocker to clear next: confirm at
-runtime that the camera global is live during gameplay, and find how the
-view/projection reaches the GPU.
+**Status:** Phase 1 done + first live debug session. Foothold **runs in-game**
+(proxy loads, probe reads memory). **Runtime result: the FCE editor camera global
+is NULL in retail gameplay** — the whole `FCE_*` editor API is editor-only, and
+the game camera is a *different* class than the editor camera (a snapshot scan
+for the editor layout found no real match). · **VR-readiness verdict:** TBD,
+still feasible — but the camera must be obtained from the D3D9 render path, not
+the editor API. Next blocker: hook D3D9 Present/EndScene and capture the
+view/projection matrix.
 
 ---
 
@@ -149,10 +151,16 @@ view/projection reaches the GPU.
   editor's "clip camera to terrain" option). So *overriding* the camera by
   writing the struct may need to go through, or after, that helper — or be
   applied downstream at the GPU boundary instead. TBD which.
-- **OPEN QUESTION (the one that gates everything):** is this global populated and
-  driving the render during actual *gameplay* (not just the editor)? The Phase-1
-  camera probe (in `-staging`, read-only) exists to answer exactly this from a
-  log. Until it does, treat the struct as a strong hypothesis.
+- **ANSWERED (2026-08-21 live debug):** NO. Read via x32dbg in-game,
+  `*(void**)0x1164FE7C == 0x00000000`. The editor camera global is **null during
+  retail gameplay** — it is populated only when the map editor runs. The other
+  `FCE_*` globals are unset too: console-mgr `0x11606280` and scene `0x1164FE04`
+  read as null/garbage, and view `0x11609560` holds a stale pointer into a string
+  constant. **The entire FCE editor API is editor-only.** Furthermore, a scan of
+  a full 720 MB in-game memory snapshot for this exact struct layout (orthonormal
+  basis at +0x4C + FOV at +0x2C + finite world position) found **no real camera**
+  — so the game camera is a *different class* with a different layout. The struct
+  above remains valid for the *editor* camera only.
 - **View / viewport object located.** `FCE_Engine_UpdateViewport` writes width
   and height into a **global view object at `0x11609560`** (RVA `0x1609560`) at
   **`+0x20` (width)** and **`+0x24` (height)**, then calls a
@@ -219,6 +227,18 @@ view/projection reaches the GPU.
   i686 it needs underscore-decorated asm labels, plain `jmp *_ptr_NAME`, and
   **bare** names in the `.def` (the i386 linker auto-prepends the underscore;
   writing `NAME = _NAME` double-underscores and fails to link).
+- **The whole `FCE_*` (Far Cry Editor) export family is EDITOR-ONLY** — its
+  globals are null in the retail game. Useful for recovering the *editor* camera
+  struct layout and math conventions statically, but do NOT expect any FCE global
+  to be live during gameplay. The game camera must come from the render path.
+- **Debugging FC2 under x64dbg — two traps (both solved):**
+  1. Launching FC2 *under* x32dbg and later detaching leaves DirectInput broken
+     (mouse dead in-game). **Always launch the game normally and *attach* to the
+     running process**; never launch-under-debugger then detach.
+  2. Dunia names every thread via `MS_VC_EXCEPTION (0x406D1388)`, so x32dbg with
+     default first-chance breaking stops constantly during init/level-load.
+     Disable `[Events] DllEntry/TlsCallbacks/DllLoad/EntryBreakpoint/ThreadEntry`
+     and/or add a first-chance ignore filter before running.
 
 ## 12. Open risks toward the North Star
 - **32-bit address space** — a stereo/VR runtime (OpenXR/OpenVR) plus the engine
