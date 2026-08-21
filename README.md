@@ -21,6 +21,10 @@ interface metadata, and our own code/notes.
   `FCE_Camera_*` exports that recovered the engine camera struct (position, FOV,
   basis vectors, angles) and its singleton global. Findings write-up + raw
   capstone disassembly.
+- **`recon/2026-08-21-phase1-live-debug/`** — first live run + x32dbg session.
+  Confirmed the FCE editor globals are all null during retail gameplay and the
+  game camera is a different class (720 MB snapshot scan found no editor-layout
+  match). Includes the debugging workflow gotchas learned.
 
 ## Legal
 
