@@ -32,6 +32,7 @@ project.
 | OpenVR / SteamVR (VR runtime and compositor target) | Valve | https://github.com/ValveSoftware/openvr |
 | OpenXR (cross-vendor VR runtime standard) | The Khronos Group and contributors | https://www.khronos.org/openxr/ |
 | Superpowers (skills framework used during development) | Jesse Vincent (GitHub: obra) and contributors at Prime Radiant | https://github.com/obra/superpowers |
+| Alternate-eye rendering (AER) as a flat-to-VR technique | Luke Ross (R.E.A.L. VR mods) — concept inspiration only; his software is closed-source and **no code of his was used or seen** | https://patreon.com/realvr |
 | Community reverse-engineering of the Far Cry / Dunia engine | The Far Cry / Dunia modding community | — |
 | AI development assistance | Claude (Anthropic) | https://www.anthropic.com |
 
