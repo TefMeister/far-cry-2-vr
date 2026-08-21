@@ -5,9 +5,12 @@
 > `-dev-archive` / `-modding-notes` repos; this file is the *distilled current
 > truth*. Update it whenever a fact changes; correct false leads in place.
 
-**Status:** Phase 0 — Ground truth & setup (static recon only; nothing injected
-yet) · **VR-readiness verdict:** TBD — feasible on paper (in-process x86 engine,
-D3D9/D3D10 renderer, clean editor C-API surface), no camera work done yet.
+**Status:** Phase 1 — foothold built (compile-verified winmm proxy; not yet run
+in-game). Camera struct recovered *statically*. · **VR-readiness verdict:** TBD,
+trending feasible — in-process x86 engine, D3D9 renderer, and a fully-mapped
+camera object located via the editor C-API. Blocker to clear next: confirm at
+runtime that the camera global is live during gameplay, and find how the
+view/projection reaches the GPU.
 
 ---
 
@@ -92,13 +95,15 @@ D3D9/D3D10 renderer, clean editor C-API surface), no camera work done yet.
 - **Attach workflow:** not yet attempted. Plan: launch via Steam, attach x64dbg
   (32-bit engine → use x32dbg) to `FarCry2.exe`, but breakpoints of interest are
   in the loaded `Dunia.dll` module.
-- **Injection vector (candidates, none tried yet):**
-  - **Proxy DLL** — Dunia imports several hijackable system DLLs. Strong
-    candidates: **`eax.dll`** (already a loose file in `bin/`, so a proxy drops
-    in cleanly), `binkw32.dll`, or a `dinput8.dll`/`d3d9.dll` proxy. `eax.dll`
-    is the cleanest since it's a small, non-critical, already-local dependency.
-  - Alternatively a classic injector into `FarCry2.exe`.
-  - **Decision: TBD** — lean toward `eax.dll` or `d3d9.dll` proxy.
+- **Injection vector — CHOSEN: `winmm.dll` proxy.** `Dunia.dll` imports
+  `WINMM.dll`, and `winmm` is not a Windows *KnownDLL*, so a local copy beside
+  `FarCry2.exe` wins the loader search. A 32-bit proxy forwarding all 180 real
+  winmm exports (resolved at runtime from System32; the real DLL is never
+  shipped) builds and is compile-verified in `-staging/proxy-winmm/`. Chosen over
+  `eax.dll` for consistency with the proven cross-project scaffold and because it
+  needs no rename dance with an already-local file.
+  - Also viable, not needed: `eax.dll` (already loose in `bin/`), `d3d9.dll`,
+    `dinput8.dll` proxies, or a classic injector into `FarCry2.exe`.
 
 ## 5. Threading & frame structure
 - Unknown / not yet investigated. CryEngine-1-era, so expect a **main thread +
@@ -107,21 +112,50 @@ D3D9/D3D10 renderer, clean editor C-API surface), no camera work done yet.
   the loop.
 - One-frame walkthrough: **TBD** (Phase 3).
 
-## 6. Camera & projection delivery (the crucial section) — NOT YET DONE
-- **Editor C-API hint:** `Dunia.dll` exports a rich **`FCE_Camera_*`** family
-  (the Far Cry 2 map-editor's camera interface into the live engine) — 14
-  functions incl. `FCE_Camera_GetPos/SetPos`, `GetAngles/SetAngles`, `Rotate`,
-  `GetFOV`, `GetFront/Right/UpVector`, `Get/SetSpeed`. These are *editor*
-  entry points, but they are thin wrappers over the **same underlying camera
-  object** the game uses, so they're a gift: they name the fields and give us
-  ready-made read/write hooks to locate the camera struct in memory.
-  `FCE_Engine_UpdateViewport` is the likely per-frame viewport push.
-- **How the world transform reaches the GPU:** UNKNOWN. D3D9 means it's *either*
-  fixed-function `SetTransform(WORLD/VIEW/PROJECTION)` *or* (far more likely for
-  a 2008 shader engine) **vertex-shader constants via
-  `SetVertexShaderConstantF`** — a shared VP matrix in a known constant register
-  range. Must confirm by hooking + shader disassembly (`shadersobj.dat`).
-- **CB slot / offset / handedness / FOV source / per-eye maths:** all **TBD**
+## 6. Camera & projection delivery (the crucial section) — CAMERA STRUCT FOUND (static)
+- **Camera singleton located.** Disassembling the editor's `FCE_Camera_*`
+  accessors (they are thin readers/writers over the engine's live camera object)
+  revealed a global pointer and a fully-mapped struct. All 14 accessors read
+  through the **same global**, and it has **101 xrefs** across `.text` — this is
+  a core engine object, not an editor-only artefact.
+
+  ```
+  Dunia.dll preferred ImageBase : 0x10000000
+  camera-singleton global (VA)  : 0x1164FE7C   →  RVA 0x0164FE7C
+      CCamera* cam = *(CCamera**)(dunia_base + 0x0164FE7C);
+  ```
+
+  **Struct layout (byte offsets from `cam`), from disassembly:**
+
+  | offset | field | source accessor |
+  |---|---|---|
+  | +0x0C / +0x10 / +0x14 | position x/y/z | `FCE_Camera_GetPos` |
+  | +0x2C | FOV (units TBD: deg or rad) | `FCE_Camera_GetFOV` |
+  | +0x4C / +0x50 / +0x54 | front (forward) vector | `FCE_Camera_GetFrontVector` |
+  | +0x58 / +0x5C / +0x60 | up vector | `FCE_Camera_GetUpVector` |
+  | +0x64 / +0x68 / +0x6C | right vector | `FCE_Camera_GetRightVector` |
+  | +0x70 / +0x74 / +0x78 | euler angles (pitch/yaw/roll?) | `FCE_Camera_GetAngles` |
+
+  A position + orthonormal right/up/front basis + FOV + euler angles: a textbook
+  camera. The basis vectors give us the **view rotation directly** (no matrix
+  decompose needed), and **FOV at +0x2C is the projection lever** for per-eye
+  work. **Reads only are proven; ASLR means the global must be resolved as
+  `GetModuleHandleW("Dunia.dll") + 0x0164FE7C` at runtime, never hardcoded.**
+- **Writes are non-trivial.** `SetPos`/`SetAngles`/`Rotate` don't poke fields;
+  they funnel through a helper at `0x10837A10` (which itself touches another
+  global `0x1164FE04`, likely the scene/collision manager — consistent with the
+  editor's "clip camera to terrain" option). So *overriding* the camera by
+  writing the struct may need to go through, or after, that helper — or be
+  applied downstream at the GPU boundary instead. TBD which.
+- **OPEN QUESTION (the one that gates everything):** is this global populated and
+  driving the render during actual *gameplay* (not just the editor)? The Phase-1
+  camera probe (in `-staging`, read-only) exists to answer exactly this from a
+  log. Until it does, treat the struct as a strong hypothesis.
+- **How the world transform reaches the GPU:** still UNKNOWN. D3D9 → *either*
+  fixed-function `SetTransform(VIEW/PROJECTION)` *or* (more likely for a 2008
+  shader engine) **`SetVertexShaderConstantF`** with a shared VP matrix in a
+  known register range. Confirm by hooking + `shadersobj.dat` disassembly.
+- **CB slot / offset / handedness / FOV units / per-eye maths:** **TBD**
   (Phase 4 keystone).
 
 ## 7. Constant-buffer fill mechanism — NOT YET DONE
@@ -159,6 +193,16 @@ D3D9/D3D10 renderer, clean editor C-API surface), no camera work done yet.
   in `Dunia.dll`.
 - **PunkBuster / `pb/`** is multiplayer-only; not a single-player anti-tamper
   obstacle.
+- **Don't hardcode `0x1164FE7C`** for the camera global — that's the VA at the
+  preferred base; under ASLR you must use RVA `0x0164FE7C` + runtime module base.
+- **Camera writes aren't field pokes** — `SetPos`/`SetAngles`/`Rotate` go through
+  helper `0x10837A10`; naively writing the position floats may be ignored or
+  overwritten. (Untested — flagged, not confirmed.)
+- **32-bit proxy build gotcha (solved):** the shared winmm forwarder scaffold
+  from prior projects is 64-bit (`jmp *ptr(%rip)`, undecorated symbols). For
+  i686 it needs underscore-decorated asm labels, plain `jmp *_ptr_NAME`, and
+  **bare** names in the `.def` (the i386 linker auto-prepends the underscore;
+  writing `NAME = _NAME` double-underscores and fails to link).
 
 ## 12. Open risks toward the North Star
 - **32-bit address space** — a stereo/VR runtime (OpenXR/OpenVR) plus the engine
