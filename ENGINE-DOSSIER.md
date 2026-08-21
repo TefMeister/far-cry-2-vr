@@ -5,14 +5,12 @@
 > `-dev-archive` / `-modding-notes` repos; this file is the *distilled current
 > truth*. Update it whenever a fact changes; correct false leads in place.
 
-**Status:** Phase 1 done + first live debug session. Foothold **runs in-game**
-(proxy loads, probe reads memory). **Runtime result: the FCE editor camera global
-is NULL in retail gameplay** — the whole `FCE_*` editor API is editor-only, and
-the game camera is a *different* class than the editor camera (a snapshot scan
-for the editor layout found no real match). · **VR-readiness verdict:** TBD,
-still feasible — but the camera must be obtained from the D3D9 render path, not
-the editor API. Next blocker: hook D3D9 Present/EndScene and capture the
-view/projection matrix.
+**Status:** Phase 1 done + **D3D9 Present hook WORKING in-game** (verified
+2026-08-21). We own the frame boundary on the game's real device; the editor
+camera globals are confirmed null in retail (game camera is a different class).
+· **VR-readiness verdict:** feasible, on track — render-path hooking works. Next:
+hook `SetVertexShaderConstantF` on the captured device to find the view/projection
+matrix (the game camera).
 
 ---
 
@@ -171,10 +169,24 @@ view/projection matrix.
   those observer callbacks, not in this routine.** Finding that callback (and the
   camera→view→projection handoff) is far cheaper dynamically, once we're hooked,
   than by chasing vtables statically — so it's deferred to the Present-hook work.
-- **How the world transform reaches the GPU:** still UNKNOWN. D3D9 → *either*
-  fixed-function `SetTransform(VIEW/PROJECTION)` *or* (more likely for a 2008
-  shader engine) **`SetVertexShaderConstantF`** with a shared VP matrix in a
-  known register range. Confirm by hooking + `shadersobj.dat` disassembly.
+- **Render device captured (2026-08-21).** The D3D9 `Present` hook
+  (`-staging/proxy-winmm/src/d3d9_hook.c`) fires on the game's real device
+  (`IDirect3DDevice9` @ e.g. `0x039757E0`, a heap COM object — not any FCE
+  global). Confirmed facts from the hook:
+  - **Back buffer: 1280×720, format 21 = `D3DFMT_A8R8G8B8`, no MSAA** (the
+    game's real render-target size/format — needed for the VR path).
+  - **`behaviorFlags = 0x40` = `D3DCREATE_HARDWARE_VERTEXPROCESSING`** → the game
+    uses hardware vertex processing / programmable shaders, so the world
+    transform almost certainly reaches the GPU via **`SetVertexShaderConstantF`**
+    (a shared view-projection matrix in a constant-register range), NOT
+    fixed-function `SetTransform`. This is the next hook to add.
+  - Hook is stable: frame heartbeat climbs (#1 → #1024+) with no crash/perf hit,
+    and it all fires at the **menu** (no gameplay/mouse needed) since Present
+    runs every frame.
+- **How the world transform reaches the GPU:** narrowed to
+  **`SetVertexShaderConstantF`** (per the HW-vertex-processing flag above);
+  confirm the exact constant registers by hooking it + cross-checking
+  `shadersobj.dat`.
 - **Angle↔basis math exists:** `FCE_Core_GetAxisFromAngles` /
   `GetAnglesFromAxis` / `GetAxisFromAngles` build the rotation basis from euler
   angles (call into helper `0x10050990`) — the reference for handedness/rotation
