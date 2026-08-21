@@ -4,6 +4,19 @@ Distilled, reusable reverse-engineering knowledge for the **Far Cry 2 VR**
 project. This is the *current-truth* engine reference, kept separate from the
 chronological history in the `-dev-archive` / `-modding-notes` repos.
 
+## The five repositories for Far Cry 2 VR
+
+Everything for this game lives in five repositories, each with one job — so you
+always know where to look. You are in **far-cry-2-vr-engine-research**.
+
+| Repository | What lives here |
+| --- | --- |
+| [far-cry-2-vr-mod](https://github.com/TefMeister/far-cry-2-vr-mod) | The mod itself — the Far Cry 2 (Dunia engine) VR mod (pre-release; RE in progress). |
+| [far-cry-2-vr-dev-archive](https://github.com/TefMeister/far-cry-2-vr-dev-archive) | Full development history — snapshots, probes, dead ends, raw recon. |
+| [far-cry-2-vr-modding-notes](https://github.com/TefMeister/far-cry-2-vr-modding-notes) | Readable field notes / progress ledger. |
+| [far-cry-2-vr-staging](https://github.com/TefMeister/far-cry-2-vr-staging) 🔒 | **Private** — unverified WIP builds, cross-machine handoff. |
+| **far-cry-2-vr-engine-research** ← you are here | Distilled engine reference (dossier) + reusable VR RE playbook. |
+
 ## Contents
 
 - **[PLAYBOOK.md](PLAYBOOK.md)** — the engine-agnostic VR reverse-engineering
