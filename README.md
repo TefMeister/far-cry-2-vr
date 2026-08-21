@@ -18,6 +18,10 @@ For releases (none yet), see
   — project set up, five repos created, first look at the binaries. Established
   that Far Cry 2 is a 32-bit D3D9 Dunia engine living in `Dunia.dll`, with a rich
   editor camera API that should shortcut finding the camera.
+- **[2026-08-21 — Phase 1 foothold & camera struct](2026-08-21-phase1-foothold-and-camera.md)**
+  — recovered the full camera struct statically (position/FOV/basis/angles via
+  the `FCE_Camera_*` accessors), and built a compile-verified 32-bit `winmm.dll`
+  proxy with a read-only camera probe. Not yet run in-game.
 
 ## Legal
 
