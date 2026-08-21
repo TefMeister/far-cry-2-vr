@@ -39,6 +39,10 @@ always know where to look. You are in **far-cry-2-vr-modding-notes**.
   — ran the proxy in-game (foothold works!) and attached a debugger: the FCE
   editor camera/globals are all null during real gameplay. The game camera is a
   different class. Next: hook Direct3D 9 to get the real camera.
+- **[2026-08-21 — Found the game camera on the render path](2026-08-21-found-the-camera-on-the-render-path.md)**
+  — hooked D3D9 `Present` + `SetVertexShaderConstantF`; the camera view matrix is
+  at shader constant register c12 (exact inverse at c36), position confirmed by
+  walking. The keystone for VR is in hand.
 
 ## Legal
 
