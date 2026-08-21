@@ -362,3 +362,58 @@ high-value facts that stop future ambushes:
 - Keep a running ledger and a clean resume point at all times.
 - Pull a human in only for what genuinely needs eyes (headset judgements, rare
   visual confirmations). Everything else is self-driven via the Phase 2 harness.
+
+---
+
+## Appendix: UEVR and cross-engine VR mods as reference implementations
+
+The playbook above assumes no prior art. Often there is none *for your engine* — but there is
+mature, open prior art for the **engine-agnostic half** of the problem, and it is worth mining
+as a reference even when it cannot touch your game directly.
+
+**UEVR** (Praydog's Unreal Engine VR injector) is the prime example. It attaches only to
+**Unreal Engine 4.8 → 5.x**, using Unreal's own reflection (RTTI/vtable scans for `FSceneView`,
+`GEngine`, the `UObject`/`FName` system). If the target is an older Unreal (UE2/UE3) or a
+non-Unreal engine, **the injector will not attach and cannot be made to — do not try.** What
+transfers is the *architecture and the reusable layers*, as reference, not as code you drop in.
+
+### What in UEVR (and its kin) is reusable — mapped onto the phases
+
+- **Phase 1 (foothold):** the loader/injector pattern and the fail-safe per-frame hook. Generic.
+- **Phase 5 (stereo):** the stereo compositor loop — render the frame, capture the
+  view-projection, build a per-eye `K_eye`, produce the second eye, submit side-by-side. UEVR's
+  per-eye matrix construction and its handling of post/AA history matrices are a worked example
+  of Phase 5.
+- **Phase 6 (runtime — the North Star):** UEVR's **OpenXR/OpenVR runtime layer is the most
+  reusable part of all** — device init, per-eye swapchain/texture submission, HMD pose sampling,
+  frame timing and reprojection. This is exactly Phase 6.1–6.4, already solved in the open,
+  independent of which engine drew the frame.
+- **Cross-cutting VR math:** projection-matrix decomposition, per-eye FOV/IPD, world-scale,
+  decoupled-yaw / roomscale, HUD-to-depth. Pure math; lift the approach freely.
+
+### What is UE-locked — do NOT try to reuse it on a non-UE4/5 engine
+
+- How UEVR *finds* the camera: RTTI/vtable scanning for `FSceneView`, `StereoRenderingDevice`,
+  `GEngine`, and the `UObject`/`FName` reflection system. Your engine has none of this — Phase 3
+  must find the camera its own way.
+- Its native stereo path that flips Unreal's built-in `bIsStereoEnabled`.
+- The `UObject`/Blueprint plugin and Lua scripting API.
+- Motion-controller injection into Unreal's input pipeline.
+
+The rule: **reuse UEVR's runtime + compositor + math (the engine-agnostic half); ignore its
+Unreal-reflection camera plumbing (the engine-locked half).** The "own the camera" keystone
+(Phase 4) is always your own work in your engine.
+
+### Pick the right reference for the engine family
+
+- **RE Engine (RE2 / RE3 / etc.):** the correct analog is **REFramework's own VR mod**, not
+  UEVR — a purpose-built, turnkey VR path already exists for this family. Prefer it.
+- **UE3 (e.g. Enslaved):** no UEVR-for-UE3 exists; UE3 is UE4's direct ancestor, so UEVR is
+  useful as *conceptual* reference (view-matrix location, `TArray`/`FName` conventions) but not
+  as runnable code.
+- **UE2 (e.g. XIII), Dunia (Far Cry 2), id Tech 5 (The Evil Within), bespoke engines
+  (Psychonauts):** no turnkey tool; treat Phase 3–4 as a fully manual camera-matrix hunt and
+  borrow only UEVR's runtime/compositor/math layers for Phases 5–6.
+
+> Bottom line: a mature cross-engine VR mod is a **reference for the half of the work that is
+> the same everywhere**. It never removes the keystone task of owning *your* engine's camera.
