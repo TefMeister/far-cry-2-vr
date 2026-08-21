@@ -5,12 +5,13 @@
 > `-dev-archive` / `-modding-notes` repos; this file is the *distilled current
 > truth*. Update it whenever a fact changes; correct false leads in place.
 
-**Status:** Phase 1 done + **D3D9 Present hook WORKING in-game** (verified
-2026-08-21). We own the frame boundary on the game's real device; the editor
-camera globals are confirmed null in retail (game camera is a different class).
-· **VR-readiness verdict:** feasible, on track — render-path hooking works. Next:
-hook `SetVertexShaderConstantF` on the captured device to find the view/projection
-matrix (the game camera).
+**Status:** **GAME CAMERA FOUND on the render path** (verified in gameplay
+2026-08-21). D3D9 Present + `SetVertexShaderConstantF` hooks work; the camera
+view matrix is uploaded to vertex-shader constant register **c12** (world→view)
+with its exact inverse at **c36** (view→world), and the translation **tracks the
+player as they walk** — confirmed. · **VR-readiness verdict:** feasible, on
+track — we can read the live camera every frame. Next: derive/confirm the
+projection and per-eye override maths.
 
 ---
 
@@ -183,10 +184,28 @@ matrix (the game camera).
   - Hook is stable: frame heartbeat climbs (#1 → #1024+) with no crash/perf hit,
     and it all fires at the **menu** (no gameplay/mouse needed) since Present
     runs every frame.
-- **How the world transform reaches the GPU:** narrowed to
-  **`SetVertexShaderConstantF`** (per the HW-vertex-processing flag above);
-  confirm the exact constant registers by hooking it + cross-checking
-  `shadersobj.dat`.
+- **How the world transform reaches the GPU — SOLVED (2026-08-21).** Confirmed
+  `SetVertexShaderConstantF`. Hooking it and dumping the low constant registers
+  (first-write per frame, since the HUD overwrites low registers just before
+  Present) located the camera:
+  - **c12–c15 = VIEW matrix (world→view):** a rigid transform (orthonormal 3×3
+    rotation + translation), row-vector/row-major (`m[3]=(0,0,0,1)`).
+  - **c36–c39 = its exact inverse (view→world = camera world transform):**
+    verified `c36 == inverse(c12)` (rotation transposed, translation `−RᵀT`).
+    Its translation is the **camera world position**, and it **changed as the
+    player walked** (X/Y move on a ~64-unit grid, Z≈1000 = eye height) — proof
+    it's the camera, not a static object. Example (standing): pos ≈
+    (2144, 2720, 1000), facing an axis (clean 90°-about-Z rotation).
+  - **c16–c19 = projection**, but split with a **1/32 ↔ 32 scale** against the
+    view (c0/c8 carry ~0.031 = 1/32 factors) — a float-precision trick for FC2's
+    huge world. This is why a naive "sparse projection" heuristic does NOT match
+    a clean D3D perspective matrix here (it false-flagged a swizzle at c71).
+  - The game uploads **combined/scaled matrices**, not a standalone clean
+    projection — plan per-eye maths around the c12 view + c16 scaled projection.
+  - Caveat: the first-write-per-frame value may be a sector-relative view (the
+    64-unit grid stepping); confirm whether the main-pass camera write differs
+    when building the override. Full dump:
+    `-dev-archive/recon/2026-08-21-phase1-live-debug/d3d9-vs-constants-gameplay-camera-found.log`.
 - **Angle↔basis math exists:** `FCE_Core_GetAxisFromAngles` /
   `GetAnglesFromAxis` / `GetAxisFromAngles` build the rotation basis from euler
   angles (call into helper `0x10050990`) — the reference for handedness/rotation
