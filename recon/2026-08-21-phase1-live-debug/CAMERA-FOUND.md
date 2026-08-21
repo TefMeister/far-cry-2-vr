@@ -45,3 +45,38 @@ with the player, so c12/c36 is the camera. Standing example: pos ≈
 Per-eye override: rewrite the c12 view (and c16 scaled projection) per eye inside
 the `SetVertexShaderConstantF` hook, honouring the 1/32↔32 split. Then stereo on
 a flat monitor.
+
+---
+
+## ADDENDUM (2026-08-21, later): the caveat was right — c12/c16 is the SHADOW rig
+
+Re-analysis of this same dump before writing the per-eye override shows the
+gameplay c12/c36/c16 first-writes are almost certainly the **sun shadow cascade
+camera**, not the eye camera:
+
+- The gameplay c16 block is **orthographic**: its bottom row is `(0,0,0,1)`, so
+  `w' = 1` — no perspective divide. Sun shadow maps are drawn with exactly such
+  ortho projections; the 32 / 0.031 diagonals are cascade extents, not a
+  precision split.
+- The c36 rig sits at **Z = 1000 exactly**, pitch-free, with a clean 90°
+  axis-aligned basis, and steps on a **64-unit grid** — classic shadow-cascade
+  **texel snapping** while following the player from above. c44 carries the sun
+  direction `(0,0,-1)` (straight down) and both positions: the rig at
+  `(x, y, 1000)` and what looks like the **real eye at `(x, y, 35.3)`**.
+- Why we never saw the real camera: the **shadow pass draws first** each frame
+  (first-write capture sees it) and the **HUD draws last** (last-write capture
+  sees that); the main pass writes in between.
+
+What a real Dunia perspective transform looks like (from the menu frames, where
+the 3D background has no shadow pass): the bottom row is the **view forward
+axis** — `w'` is taken from view depth, e.g. c8 rows
+`[0,0,-1,-0.25] / [0,0,-1,0]`. Dunia view space is Z-up / Y-forward
+(CryEngine heritage), so in gameplay the depth row will look like `(0,±1,0,·)`
+rotated by yaw.
+
+**Consequence for the override:** do not hardcode c12/c16. The stereo module in
+`-staging/proxy-winmm/src/stereo.c` instead classifies every 4-vec4 upload at
+upload time (perspective ⇔ unit-length depth axis in the bottom row, dense upper
+rows) and offsets those, logging which registers the main pass really uses. One
+gameplay session will both identify the true camera registers and test the
+per-eye offset.
