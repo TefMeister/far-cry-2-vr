@@ -81,13 +81,15 @@ view/projection reaches the GPU.
   - **VR implication:** hook **D3D9** first (matches the shipped default and is
     the simpler surface). `IDirect3DDevice9::Present` / `SetTransform` /
     `SetVertexShaderConstantF` are the likely camera-delivery hook points — TBD.
-- **Developer console / cvar system:** engine is CryEngine-derived, so a cvar
-  system almost certainly exists internally. Console-style tokens seen are mostly
-  network `D_TRACE_*` trace flags, not render cvars. **Whether a console can be
-  opened in the retail build is UNKNOWN** — needs testing (Phase 0/2). Render
-  tuning is exposed via `GamerProfile.xml` (`WidescreenFOV`, `AspectRatio`,
-  `ForceWidescreen`, MSAA, resolution) rather than a live console, as far as we
-  know so far.
+- **Developer console — CONFIRMED to exist.** The export
+  `FCE_Engine_IsConsoleOpen` reads a **console/UI-manager global at `0x11606280`**
+  (RVA `0x1606280`) and returns the **byte at `+0x69`** as the "console open"
+  flag. So a console subsystem is present with a live open/closed state — a
+  strong lever for the Phase-2 autonomous harness (whether it can be *opened* in
+  retail, and what commands it takes, is the next thing to probe). Other
+  console-ish tokens in strings are mostly network `D_TRACE_*` flags. Render
+  tuning is also exposed via `GamerProfile.xml` (`WidescreenFOV`, `AspectRatio`,
+  `ForceWidescreen`, MSAA, resolution).
 
 ## 4. DRM / anti-debug & injection foothold
 - **DRM:** none observed in the single-player binary (no SecuROM/Denuvo; Steam
@@ -151,10 +153,24 @@ view/projection reaches the GPU.
   driving the render during actual *gameplay* (not just the editor)? The Phase-1
   camera probe (in `-staging`, read-only) exists to answer exactly this from a
   log. Until it does, treat the struct as a strong hypothesis.
+- **View / viewport object located.** `FCE_Engine_UpdateViewport` writes width
+  and height into a **global view object at `0x11609560`** (RVA `0x1609560`) at
+  **`+0x20` (width)** and **`+0x24` (height)**, then calls a
+  **viewport-change dispatcher at `0x103f8ab0`**. That dispatcher is a pub/sub
+  fan-out: it walks several listener arrays (element stride `0x14`) and calls
+  `vtable+4` on each registered observer — i.e. it *notifies* subsystems that the
+  viewport changed. **The projection-matrix rebuild therefore lives inside one of
+  those observer callbacks, not in this routine.** Finding that callback (and the
+  camera→view→projection handoff) is far cheaper dynamically, once we're hooked,
+  than by chasing vtables statically — so it's deferred to the Present-hook work.
 - **How the world transform reaches the GPU:** still UNKNOWN. D3D9 → *either*
   fixed-function `SetTransform(VIEW/PROJECTION)` *or* (more likely for a 2008
   shader engine) **`SetVertexShaderConstantF`** with a shared VP matrix in a
   known register range. Confirm by hooking + `shadersobj.dat` disassembly.
+- **Angle↔basis math exists:** `FCE_Core_GetAxisFromAngles` /
+  `GetAnglesFromAxis` / `GetAxisFromAngles` build the rotation basis from euler
+  angles (call into helper `0x10050990`) — the reference for handedness/rotation
+  convention when we build per-eye view matrices.
 - **CB slot / offset / handedness / FOV units / per-eye maths:** **TBD**
   (Phase 4 keystone).
 
