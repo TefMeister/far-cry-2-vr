@@ -37,6 +37,7 @@ grows as `/game-research far-cry-2-vr` finds new leads.
 | VRto3D project (community documentation of R.E.A.L.'s AER render modes) | oneup03 and contributors | https://github.com/oneup03/VRto3D |
 | VR FOV calculation reference | risa2000 | https://risa2000.github.io/vrdocs |
 | Sensics (VR FOV conversion reference) | Sensics | https://medium.com/insights-on-virtual-reality |
+| Vireio Perception / VRBoost (alternate head-tracking-injection technique, prior art) | cybereality and the Vireio Perception contributors | https://github.com/cybereality/Perception |
 
 AI development assistance: **Claude (Anthropic)** (https://www.anthropic.com).
 
