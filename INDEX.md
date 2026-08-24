@@ -10,8 +10,7 @@ write-up in `topics/`. Status tags:
 
 | Date | Topic | Status | Summary |
 | --- | --- | --- | --- |
-
-*(No topics yet — this repo was seeded 2026-08-24. Run `/game-research far-cry-2-vr` to start.)*
+| 2026-08-24 | [AER/SteamVR ghosting + CPU readback & shared-surface techniques](topics/2026-08-24-aer-steamvr-ghosting-and-cpu-readback-techniques.md) | 🆕 new | SteamVR has a known bug that discards one eye's pose on alternate-eye `Submit` — validates the planned double-buffer-both-textures approach rather than racing per-eye pose timing. Also: the standard double/triple-buffer fix for `GetRenderTargetData` stalls, the official D3D9Ex→D3D11 shared-surface interop technique (with a keyed-mutex incompatibility gotcha specific to D3D9), the standard `W = 2·Z·tan(θ/2)` matched-FOV virtual-screen formula for the next roadmap item, and confirmation that some AER ghosting is an industry-wide known tradeoff, not a bug to chase. |
 
 ## How to add a topic
 
