@@ -30,6 +30,13 @@ grows as `/game-research far-cry-2-vr` finds new leads.
 
 | Source / Work | Creator(s) | Link |
 |---|---|---|
+| OpenVR (SteamVR AER/per-eye-pose bug research) | Valve / ValveSoftware GitHub issue reporters | https://github.com/ValveSoftware/openvr |
+| Microsoft Learn (D3D9Ex/D3D11 surface-sharing & GetRenderTargetData documentation) | Microsoft | https://learn.microsoft.com |
+| GameDev.net forum community (D3D9 readback & shared-surface technique discussions) | GameDev.net contributors | https://gamedev.net |
+| R.E.A.L. VR mods (AER technique reference) | Luke Ross | https://www.patreon.com/realvr |
+| VRto3D project (community documentation of R.E.A.L.'s AER render modes) | oneup03 and contributors | https://github.com/oneup03/VRto3D |
+| VR FOV calculation reference | risa2000 | https://risa2000.github.io/vrdocs |
+| Sensics (VR FOV conversion reference) | Sensics | https://medium.com/insights-on-virtual-reality |
 
 AI development assistance: **Claude (Anthropic)** (https://www.anthropic.com).
 
