@@ -38,6 +38,8 @@ grows as `/game-research far-cry-2-vr` finds new leads.
 | VR FOV calculation reference | risa2000 | https://risa2000.github.io/vrdocs |
 | Sensics (VR FOV conversion reference) | Sensics | https://medium.com/insights-on-virtual-reality |
 | Vireio Perception / VRBoost (alternate head-tracking-injection technique, prior art) | cybereality and the Vireio Perception contributors | https://github.com/cybereality/Perception |
+| Helix Mod: Far Cry 2 (DX9) — 3D Vision fix | Helix Mod community | https://helixmod.blogspot.com/2013/01/far-cry-2-dx9.html |
+| SteamVR/Frame Timing documentation | Valve | https://developer.valvesoftware.com/wiki/SteamVR/Frame_Timing |
 
 AI development assistance: **Claude (Anthropic)** (https://www.anthropic.com).
 
