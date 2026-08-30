@@ -1,0 +1,179 @@
+Dunia.dll FCE_Camera_* disassembly (ImageBase 0x10000000)
+
+===== FCE_Camera_GetPos @ 0x1088ec40 =====
+  1088ec40  mov     eax, dword ptr [0x1164fe7c]
+  1088ec45  fld     dword ptr [eax + 0xc]
+  1088ec48  mov     ecx, dword ptr [esp + 4]
+  1088ec4c  mov     edx, dword ptr [esp + 8]
+  1088ec50  fstp    dword ptr [ecx]
+  1088ec52  fld     dword ptr [eax + 0x10]
+  1088ec55  add     eax, 8
+  1088ec58  fstp    dword ptr [edx]
+  1088ec5a  fld     dword ptr [eax + 0xc]
+  1088ec5d  mov     eax, dword ptr [esp + 0xc]
+  1088ec61  fstp    dword ptr [eax]
+  1088ec63  ret     
+
+===== FCE_Camera_SetPos @ 0x1088ec70 =====
+  1088ec70  sub     esp, 0xc
+  1088ec73  mov     ecx, dword ptr [0x1164fe7c]
+  1088ec79  movss   xmm0, dword ptr [esp + 0x10]
+  1088ec7f  push    1
+  1088ec81  push    0
+  1088ec83  movss   dword ptr [esp + 8], xmm0
+  1088ec89  movss   xmm0, dword ptr [esp + 0x1c]
+  1088ec8f  lea     eax, [ecx + 0x70]
+  1088ec92  push    eax
+  1088ec93  lea     edx, [esp + 0xc]
+  1088ec97  movss   dword ptr [esp + 0x10], xmm0
+  1088ec9d  movss   xmm0, dword ptr [esp + 0x24]
+  1088eca3  push    edx
+  1088eca4  movss   dword ptr [esp + 0x18], xmm0
+  1088ecaa  call    0x10837a10
+  1088ecaf  add     esp, 0xc
+  1088ecb2  ret     
+
+===== FCE_Camera_GetAngles @ 0x1088ecc0 =====
+  1088ecc0  mov     eax, dword ptr [0x1164fe7c]
+  1088ecc5  fld     dword ptr [eax + 0x70]
+  1088ecc8  mov     ecx, dword ptr [esp + 4]
+  1088eccc  mov     edx, dword ptr [esp + 8]
+  1088ecd0  fstp    dword ptr [ecx]
+  1088ecd2  fld     dword ptr [eax + 0x74]
+  1088ecd5  add     eax, 0x70
+  1088ecd8  fstp    dword ptr [edx]
+  1088ecda  fld     dword ptr [eax + 8]
+  1088ecdd  mov     eax, dword ptr [esp + 0xc]
+  1088ece1  fstp    dword ptr [eax]
+  1088ece3  ret     
+
+===== FCE_Camera_SetAngles @ 0x10890af0 =====
+  10890af0  sub     esp, 0xc
+  10890af3  movss   xmm0, dword ptr [esp + 0x10]
+  10890af9  mov     ecx, dword ptr [0x1164fe7c]
+  10890aff  push    1
+  10890b01  push    0
+  10890b03  movss   dword ptr [esp + 8], xmm0
+  10890b09  movss   xmm0, dword ptr [esp + 0x1c]
+  10890b0f  lea     eax, [esp + 8]
+  10890b13  push    eax
+  10890b14  lea     edx, [ecx + 0xc]
+  10890b17  movss   dword ptr [esp + 0x10], xmm0
+  10890b1d  movss   xmm0, dword ptr [esp + 0x24]
+  10890b23  push    edx
+  10890b24  movss   dword ptr [esp + 0x18], xmm0
+  10890b2a  call    0x10837a10
+  10890b2f  add     esp, 0xc
+  10890b32  ret     
+
+===== FCE_Camera_GetFrontVector @ 0x1088ecf0 =====
+  1088ecf0  mov     eax, dword ptr [0x1164fe7c]
+  1088ecf5  fld     dword ptr [eax + 0x4c]
+  1088ecf8  mov     ecx, dword ptr [esp + 4]
+  1088ecfc  mov     edx, dword ptr [esp + 8]
+  1088ed00  fstp    dword ptr [ecx]
+  1088ed02  fld     dword ptr [eax + 0x50]
+  1088ed05  add     eax, 0x4c
+  1088ed08  fstp    dword ptr [edx]
+  1088ed0a  fld     dword ptr [eax + 8]
+  1088ed0d  mov     eax, dword ptr [esp + 0xc]
+  1088ed11  fstp    dword ptr [eax]
+  1088ed13  ret     
+
+===== FCE_Camera_GetUpVector @ 0x1088ed50 =====
+  1088ed50  mov     eax, dword ptr [0x1164fe7c]
+  1088ed55  fld     dword ptr [eax + 0x58]
+  1088ed58  mov     ecx, dword ptr [esp + 4]
+  1088ed5c  mov     edx, dword ptr [esp + 8]
+  1088ed60  fstp    dword ptr [ecx]
+  1088ed62  fld     dword ptr [eax + 0x5c]
+  1088ed65  add     eax, 0x58
+  1088ed68  fstp    dword ptr [edx]
+  1088ed6a  fld     dword ptr [eax + 8]
+  1088ed6d  mov     eax, dword ptr [esp + 0xc]
+  1088ed71  fstp    dword ptr [eax]
+  1088ed73  ret     
+
+===== FCE_Camera_GetRightVector @ 0x1088ed20 =====
+  1088ed20  mov     eax, dword ptr [0x1164fe7c]
+  1088ed25  fld     dword ptr [eax + 0x64]
+  1088ed28  mov     ecx, dword ptr [esp + 4]
+  1088ed2c  mov     edx, dword ptr [esp + 8]
+  1088ed30  fstp    dword ptr [ecx]
+  1088ed32  fld     dword ptr [eax + 0x68]
+  1088ed35  add     eax, 0x64
+  1088ed38  fstp    dword ptr [edx]
+  1088ed3a  fld     dword ptr [eax + 8]
+  1088ed3d  mov     eax, dword ptr [esp + 0xc]
+  1088ed41  fstp    dword ptr [eax]
+  1088ed43  ret     
+
+===== FCE_Camera_GetFOV @ 0x1088ed80 =====
+  1088ed80  mov     eax, dword ptr [0x1164fe7c]
+  1088ed85  fld     dword ptr [eax + 0x2c]
+  1088ed88  ret     
+
+===== FCE_Camera_Rotate @ 0x10892370 =====
+  10892370  sub     esp, 0xc
+  10892373  mov     ecx, dword ptr [0x1164fe7c]
+  10892379  movss   xmm0, dword ptr [ecx + 0x70]
+  1089237e  movss   xmm1, dword ptr [ecx + 0x74]
+  10892383  movss   xmm2, dword ptr [ecx + 0x78]
+  10892388  addss   xmm0, dword ptr [esp + 0x10]
+  1089238e  addss   xmm1, dword ptr [esp + 0x14]
+  10892394  addss   xmm2, dword ptr [esp + 0x18]
+  1089239a  push    1
+  1089239c  push    0
+  1089239e  lea     eax, [esp + 8]
+  108923a2  push    eax
+  108923a3  lea     edx, [ecx + 0xc]
+  108923a6  push    edx
+  108923a7  movss   dword ptr [esp + 0x10], xmm0
+  108923ad  movss   dword ptr [esp + 0x14], xmm1
+  108923b3  movss   dword ptr [esp + 0x18], xmm2
+  108923b9  call    0x10837a10
+  108923be  add     esp, 0xc
+  108923c1  ret     
+
+===== transform_helper_0x10837a10 @ 0x10837a10 =====
+  10837a10  sub     esp, 0x18
+  10837a13  push    esi
+  10837a14  mov     esi, ecx
+  10837a16  mov     ecx, dword ptr [0x1164fe04]
+  10837a1c  call    0x10831870
+  10837a21  mov     ecx, eax
+  10837a23  call    0x104fef00
+  10837a28  test    eax, eax
+  10837a2a  je      0x10837a31
+  10837a2c  add     eax, 4
+  10837a2f  jmp     0x10837a33
+  10837a31  xor     eax, eax
+  10837a33  push    edi
+  10837a34  lea     edi, [esi + 8]
+  10837a37  push    eax
+  10837a38  mov     ecx, edi
+  10837a3a  call    0x1044b590
+  10837a3f  mov     eax, dword ptr [esp + 0x24]
+  10837a43  movss   xmm0, dword ptr [eax]
+  10837a47  movss   dword ptr [esp + 8], xmm0
+  10837a4d  movss   xmm0, dword ptr [eax + 4]
+  10837a52  movss   dword ptr [esp + 0xc], xmm0
+  10837a58  movss   xmm0, dword ptr [eax + 8]
+  10837a5d  mov     eax, dword ptr [esp + 0x28]
+  10837a61  movss   dword ptr [esp + 0x10], xmm0
+  10837a67  movss   xmm0, dword ptr [eax]
+  10837a6b  movss   dword ptr [esp + 0x14], xmm0
+  10837a71  movss   xmm0, dword ptr [eax + 4]
+  10837a76  movss   dword ptr [esp + 0x18], xmm0
+  10837a7c  movss   xmm0, dword ptr [eax + 8]
+  10837a81  lea     eax, [esp + 0x14]
+  10837a85  push    eax
+  10837a86  lea     ecx, [esp + 0xc]
+  10837a8a  push    ecx
+  10837a8b  mov     ecx, esi
+  10837a8d  movss   dword ptr [esp + 0x24], xmm0
+  10837a93  call    0x108373b0
+  10837a98  movss   xmm0, dword ptr [esp + 8]
+  10837a9e  movss   dword ptr [esi + 0xc], xmm0
+  10837aa3  movss   xmm0, dword ptr [esp + 0xc]
+

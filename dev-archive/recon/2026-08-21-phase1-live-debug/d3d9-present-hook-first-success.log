@@ -1,0 +1,14 @@
+[1476668187][tid=3136] FC2VR winmm proxy attached (pid=19076) - logger + winmm + probe + D3D9 Present hook
+[1476668203][tid=23112] probe: Dunia.dll base=0x10000000, camera-global @ 0x1164FE7C (rva 0x0164FE7C)
+[1476668203][tid=23112] probe: camera pointer is NULL / unreadable (not yet populated)
+[1476668468][tid=33436] d3d9_hook: dummy device up; vtbl=0x03A58DBC Present=0x6F7D6120
+[1476668562][tid=33436] minhook_glue: hook installed and enabled: IDirect3DDevice9::Present
+[1476668562][tid=33436] d3d9_hook: Present hook active — waiting for the game to present frames
+[1476704062][tid=35768] d3d9: FIRST Present on device=0x039757E0 — real game device captured
+[1476704062][tid=35768] d3d9: device focus HWND=0x00790B68 behaviorFlags=0x00000040
+[1476704062][tid=35768] d3d9: backbuffer 1280x720 fmt=21 multisample=0
+[1476704062][tid=35768] d3d9: Present frame #1 (device=0x039757E0)
+[1476712953][tid=35768] d3d9: Present frame #512 (device=0x039757E0)
+[1476721484][tid=35768] d3d9: Present frame #1024 (device=0x039757E0)
+[1476730015][tid=35768] d3d9: Present frame #1536 (device=0x039757E0)
+[1476738546][tid=35768] d3d9: Present frame #2048 (device=0x039757E0)
