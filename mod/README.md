@@ -73,21 +73,21 @@ device, classifies the engine's shader-constant matrix uploads to find the
 real camera every frame, and rewrites those uploads to move the eye. For the
 headset path it copies the rendered backbuffer into a Direct3D 11 texture and
 submits it to the SteamVR compositor through the OpenVR API. Full technical
-detail lives in the sibling repositories below.
+detail lives in the sibling folders below.
 
-## The six repositories for Far Cry 2 VR
+## The folders for Far Cry 2 VR
 
-Everything for this game lives in six repositories, each with one job — so you
-always know where to look. You are in **far-cry-2-vr-mod**.
+Everything for this game lives in one repository, one folder per job — so you
+always know where to look. You are in **`mod/`**.
 
-| Repository | What lives here |
+| Folder | What lives here |
 | --- | --- |
-| **far-cry-2-vr-mod** ← you are here | The mod itself — releases and install instructions. |
-| [far-cry-2-vr-dev-archive](https://github.com/TefMeister/far-cry-2-vr-dev-archive) | Full development history — snapshots, probes, dead ends, raw recon. |
-| [far-cry-2-vr-modding-notes](https://github.com/TefMeister/far-cry-2-vr-modding-notes) | Readable field notes / progress ledger. |
-| [far-cry-2-vr-staging](https://github.com/TefMeister/far-cry-2-vr-staging) 🔒 | **Private** — unverified WIP builds, cross-machine handoff. |
-| [far-cry-2-vr-engine-research](https://github.com/TefMeister/far-cry-2-vr-engine-research) | Distilled engine reference (dossier) + reusable VR RE playbook. |
-| [far-cry-2-vr-external-research](https://github.com/TefMeister/far-cry-2-vr-external-research) | Ongoing public-research leads, gathered separately from hands-on modding work. |
+| **`mod/`** ← you are here | The mod itself — releases and install instructions. |
+| [`dev-archive/`](../dev-archive/) | Full development history — snapshots, probes, dead ends, raw recon. |
+| [`modding-notes/`](../modding-notes/) | Readable field notes / progress ledger. |
+| [staging/far-cry-2-vr](https://github.com/TefMeister/staging/tree/main/far-cry-2-vr) 🔒 | **Private** — unverified WIP builds, cross-machine handoff. |
+| [`engine-research/`](../engine-research/) | Distilled engine reference (dossier) + reusable VR RE playbook. |
+| [`external-research/`](../external-research/) | Ongoing public-research leads, gathered separately from hands-on modding work. |
 
 ## Third-party components
 
