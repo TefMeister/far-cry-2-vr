@@ -40,6 +40,10 @@ grows as `/game-research far-cry-2-vr` finds new leads.
 | Vireio Perception / VRBoost (alternate head-tracking-injection technique, prior art) | cybereality and the Vireio Perception contributors | https://github.com/cybereality/Perception |
 | Helix Mod: Far Cry 2 (DX9) — 3D Vision fix | Helix Mod community | https://helixmod.blogspot.com/2013/01/far-cry-2-dx9.html |
 | SteamVR/Frame Timing documentation | Valve | https://developer.valvesoftware.com/wiki/SteamVR/Frame_Timing |
+| Far Cry 2 Crew Steam group — the `devmodeon` console unlock and its misleading error message | Far Cry 2 Crew community members | [steamcommunity.com/groups/FarCry2Crew](https://steamcommunity.com/groups/FarCry2Crew/discussions/6/2269193447675170650/) |
+| AnandTech forum thread documenting Far Cry 2's console commands and the `gfx_*` family | AnandTech forum members | [forums.anandtech.com](https://forums.anandtech.com/threads/far-cry-2-console-commands.230928/) |
+| Far Cry 2 devmode / cheats guide (the `-DEVMODE` launch parameter) | AlteredGamer | [alteredgamer.com](https://www.alteredgamer.com/far-cry-2/22835-cheats-devmode-cheat-codes-and-shortcuts/) |
+| Far Cry 2 console commands and tweaks board | GameFAQs community | [gamefaqs.gamespot.com](https://gamefaqs.gamespot.com/boards/942192-far-cry-2/46145975) |
 
 AI development assistance: **Claude (Anthropic)** (https://www.anthropic.com).
 
