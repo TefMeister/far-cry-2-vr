@@ -213,7 +213,7 @@ projection and per-eye override maths.
 - **CB slot / offset / handedness / FOV units / per-eye maths:** **TBD**
   (Phase 4 keystone).
 
-## 6a. Head tracking: HMD pose -> the view-projection (built 2026-09-01, NEVER RUN)
+## 6a. Head tracking: HMD pose -> the view-projection (built 2026-09-01, deployed to the home PC the same day, NEVER RUN)
 
 `[verified-numerically 2026-09-01, n=300 synthetic cases]` for the maths;
 `[untested]` for everything about the running game. No headset on the dev PC.
@@ -288,6 +288,16 @@ The periodic log reports `camera-position solve FAILED on N`. A few during a loa
 steady non-zero count means `row3` is not the forward axis for some perspective pass this game
 makes, and the derivation needs revisiting - not a knob tuned.**
 
+### Deployment state (home PC, 2026-09-01)
+
+`[compile-verified 2026-09-01]` Rebuilt on the home PC from the same staging source (i686, llvm-mingw)
+and installed as `…\Far Cry 2in\winmm.dll`; the 2026-08-23 build it replaced is kept beside it as
+`winmm.dll.2026-09-01-pre-headtracking.bak`. The shipped-C harness reproduces `3.5e-07` when compiled
+i686 -O2 (the DLL's own target), not only x86_64. The home `GamerProfile.xml` is still `d3d9`,
+fullscreen, 1176×664 - the configuration the bridge was verified under. The five-step live test and
+what each outcome means: `modding-notes/2026-09-01-head-tracking-deployed-on-the-home-pc.md`.
+**Still `[untested]` in the game.**
+
 ## 7. Constant-buffer fill mechanism — NOT YET DONE
 - D3D9 has no `Map`/`UpdateSubresource` constant-buffer model; matrices are
   pushed each frame via `SetVertexShaderConstantF` (float register file) or
@@ -307,7 +317,8 @@ makes, and the derivation needs revisiting - not a knob tuned.**
 | `GamerProfile.xml` `WidescreenFOV="1"` | enables wider FOV scaling | possible stopgap FOV lever before real per-eye proj |
 | `GamerProfile.xml` `ForceWidescreen` / `AspectRatio` | aspect handling | needed to drive an ultra-wide / per-eye aspect |
 | `GamerProfile.xml` `Platform="d3d9"\|"dx10"` | selects renderer | keep `d3d9` for first hook target |
-| in-game console | **existence UNCONFIRMED** | investigate Phase 0/2 |
+| in-game console | `[reported 2026-09-01, community, untested by us]` opens on the key left of `1` (`~` on US layouts; layout-dependent - use scancode `0x29` if ever automated); `devmodeon` unlocks hidden commands **and prints "Unknown command" on success**; `?`/`help` describe, TAB enumerates | live: TAB-enumerate before and after `devmodeon` and diff; hunt for a position/camera readout as an independent check on the §6a camera solve. Source: `external-research/topics/2026-09-01-devmodeon-unlocks-the-console-and-tab-enumerates-it.md` |
+| `gfx_MaxFPS`, `gfx_DisableShadowGeneration`, `gfx_WaterReflectionQuality`, `Gfx_Showconfig`, `Exec` | `[reported]` renderer knobs / config runner | live pass-trouble toggles without a rebuild; `Exec` makes a stereo test repeatable |
 
 ## 10. Autonomous harness recipe (this game) — NOT YET BUILT
 - Launch to a known scene: TBD (Steam launch; skip intro; load a save).
@@ -356,8 +367,8 @@ makes, and the derivation needs revisiting - not a knob tuned.**
   scoped early.
 - **Deferred/HDR renderer** may make clean per-eye camera override harder than a
   forward renderer, if lighting passes bake in view-space assumptions.
-- **Console existence unconfirmed** — if there's no dev console, all tuning is
-  via XML + hooks, raising harness effort.
+- **Console: `[reported]` present on retail (`~`, then `devmodeon`), not yet confirmed live by us** (§9).
+  If it turns out absent on the Steam build, all tuning is via XML + hooks, raising harness effort.
 
 ---
 

@@ -45,6 +45,16 @@ always know where to look. You are in **`modding-notes/`**.
   at shader constant register c12 (exact inverse at c36), position confirmed by
   walking. The keystone for VR is in hand.
 
+- **[2026-08-23 — First real-headset contact](2026-08-23-first-real-headset-contact.md)**
+  — the D3D9→D3D11→SteamVR bridge worked on the Quest 3 first try (home PC);
+  hotkeys moved to the numpad afterwards.
+- **[2026-09-01 — Head tracking built; maths verified numerically](2026-09-01-head-tracking-built-and-verified-numerically.md)**
+  — roadmap item 3 built on the dev PC, never run; two real bugs caught by a
+  harness that drives the shipped `stereo.c`.
+- **[2026-09-01 — Head tracking deployed on the home PC](2026-09-01-head-tracking-deployed-on-the-home-pc.md)**
+  — rebuilt here, harness re-run (i686 too), installed into the game folder with
+  a dated backup; one launch and a five-step table decide it. Still not run.
+
 ## Legal
 
 Non-commercial fan modding notes. Requires a legitimately owned copy of Far Cry
