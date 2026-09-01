@@ -213,6 +213,73 @@ projection and per-eye override maths.
 - **CB slot / offset / handedness / FOV units / per-eye maths:** **TBD**
   (Phase 4 keystone).
 
+## 6a. Head tracking: HMD pose -> the view-projection (built 2026-09-01, NEVER RUN)
+
+`[verified-numerically 2026-09-01, n=300 synthetic cases]` for the maths;
+`[untested]` for everything about the running game. No headset on the dev PC.
+
+The composition never splits `M` into `P` and `V`, the same way the eye offset already avoided it.
+Every factor sits on the RIGHT of `M`, i.e. in world space:
+
+```
+M' = M * [ R | c - R*(c + t) ]
+```
+
+### The basis is derived, not hardcoded
+
+External research established that no published source gives a verified OpenVR->Dunia axis matrix,
+that every real implementation hand-derives one, and that a wrong sign is invisible until someone
+is wearing the headset. So nothing is assumed on either side:
+
+* `row0.xyz` -> camera right, `row1.xyz` -> camera up, `row3.xyz` -> the view-depth axis. (`row3`
+  is safe to use because `is_perspective_vp()` already requires it to be a roughly unit world-space
+  axis - that classifier is what this rests on.)
+* The single genuine convention difference - OpenVR's `+Z` points backwards where the game's third
+  axis points forwards - is folded into the basis by negating its forward column. The whole
+  conversion is then one change of basis, `R_camera = B*H*B^T`. **No permutation table exists in
+  the code.**
+
+### The camera position is SOLVED from M
+
+For `M = P*V` the camera maps to the view origin, so three rows must vanish there:
+
+```
+row0.xyz . c + m[3]  = 0
+row1.xyz . c + m[7]  = 0
+row3.xyz . c + m[15] = 0
+```
+
+Three equations, three unknowns, by Cramer. **Row 2 is deliberately unused** - it carries the
+near/far mapping and is the row most likely to be unusual in a given projection.
+
+### Two traps, both found by numerical testing rather than by review
+
+1. **Solve with the RAW rows, never the normalised basis.** `P`'s per-axis scales appear in the row
+   *and* in that row's own translation term, so they cancel only if both come from the same
+   unnormalised row. Mixing them silently scales the recovered camera position - the head then
+   pivots about the wrong point, which is sickening rather than obviously broken.
+2. **What post-multiplies into `M` is the INVERSE of the camera rotation.** `B*H*B^T` rotates the
+   camera; the world transform is its transpose. Composing the camera rotation directly turns the
+   view the right amount in the **wrong direction** - which in a headset presents exactly like a
+   handedness problem, so the handedness knob would "fix" it and hide the real error.
+
+`proxy-winmm/tools/verify_head_tracking.py` transcribes the algorithm and checks it against an
+independently rebuilt `P*V'` for a camera actually rotated and translated. After the fixes,
+agreement is ~1e-15; before, the relative error was **3.4**. Re-run it after any change here - this
+is maths that cannot be checked cheaply in a headset.
+
+### Live knobs (all default OFF; require the VR bridge on Num0 for a pose)
+
+`Num7` head tracking on/off - `Num2` flip rotation handedness - `Num1`/`Num3` position scale.
+
+Dunia units are ~metres (2026-08-21), so scale 1.0 is an honest starting guess, not a measurement.
+
+### The diagnostic that says the derivation itself is wrong
+
+The periodic log reports `camera-position solve FAILED on N`. A few during a load is expected. **A
+steady non-zero count means `row3` is not the forward axis for some perspective pass this game
+makes, and the derivation needs revisiting - not a knob tuned.**
+
 ## 7. Constant-buffer fill mechanism — NOT YET DONE
 - D3D9 has no `Map`/`UpdateSubresource` constant-buffer model; matrices are
   pushed each frame via `SetVertexShaderConstantF` (float register file) or
