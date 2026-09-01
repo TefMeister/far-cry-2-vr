@@ -291,7 +291,7 @@ makes, and the derivation needs revisiting - not a knob tuned.**
 ### Deployment state (home PC, 2026-09-01)
 
 `[compile-verified 2026-09-01]` Rebuilt on the home PC from the same staging source (i686, llvm-mingw)
-and installed as `…\Far Cry 2in\winmm.dll`; the 2026-08-23 build it replaced is kept beside it as
+and installed as `…\Far Cry 2bin\winmm.dll`; the 2026-08-23 build it replaced is kept beside it as
 `winmm.dll.2026-09-01-pre-headtracking.bak`. The shipped-C harness reproduces `3.5e-07` when compiled
 i686 -O2 (the DLL's own target), not only x86_64. The home `GamerProfile.xml` is still `d3d9`,
 fullscreen, 1176×664 - the configuration the bridge was verified under. The five-step live test and
