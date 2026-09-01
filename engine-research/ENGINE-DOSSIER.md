@@ -102,7 +102,7 @@ projection and per-eye override maths.
   `WINMM.dll`, and `winmm` is not a Windows *KnownDLL*, so a local copy beside
   `FarCry2.exe` wins the loader search. A 32-bit proxy forwarding all 180 real
   winmm exports (resolved at runtime from System32; the real DLL is never
-  shipped) builds and is compile-verified in `-staging/proxy-winmm/`. Chosen over
+  shipped) builds and is compile-verified in `staging/far-cry-2-vr/proxy-winmm/`. Chosen over
   `eax.dll` for consistency with the proven cross-project scaffold and because it
   needs no rename dance with an already-local file.
   - Also viable, not needed: `eax.dll` (already loose in `bin/`), `d3d9.dll`,
@@ -171,7 +171,7 @@ projection and per-eye override maths.
   camera→view→projection handoff) is far cheaper dynamically, once we're hooked,
   than by chasing vtables statically — so it's deferred to the Present-hook work.
 - **Render device captured (2026-08-21).** The D3D9 `Present` hook
-  (`-staging/proxy-winmm/src/d3d9_hook.c`) fires on the game's real device
+  (`staging/far-cry-2-vr/proxy-winmm/src/d3d9_hook.c`) fires on the game's real device
   (`IDirect3DDevice9` @ e.g. `0x039757E0`, a heap COM object — not any FCE
   global). Confirmed facts from the hook:
   - **Back buffer: 1280×720, format 21 = `D3DFMT_A8R8G8B8`, no MSAA** (the
