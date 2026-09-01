@@ -102,7 +102,8 @@ keys index up to slot 8 — a one-past-the-end write on every frame a head-track
 
 ## Status and honest limits
 
-`[verified-numerically 2026-09-01, n=300 synthetic cases]` for the maths.
+`[verified-numerically 2026-09-01]` for the maths — n=300 synthetic cases against the Python
+transcription, plus n=200 against the compiled `stereo.c` itself.
 `[untested]` for everything about the actual game.
 
 **Verified:** the algebra, against ground truth. **Not verified, and not verifiable here:**
