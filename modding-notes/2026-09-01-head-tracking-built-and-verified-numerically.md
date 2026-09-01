@@ -74,6 +74,29 @@ Before the fixes the second number was **3.4** — i.e. wrong by more than the m
 bugs fail the test loudly, which is the point: this is maths that cannot be checked cheaply in a
 headset, so it is checked here instead.
 
+### Strengthened on review the same day: the SHIPPED C is now what gets tested
+
+The check above verified a **Python transcription** of the algorithm. That proves the algorithm but
+not the code — a transcription slip in either direction would go unnoticed, and transcription slips
+are the same family as the two bugs above.
+
+`proxy-winmm/tools/verify_head_tracking_harness.c` now `#include`s the real `stereo.c` (which also
+reaches its statics) and drives `apply_head_tracking()` directly;
+`verify_head_tracking_against_c.py` feeds it random cameras, projections and head poses and compares
+against the same independently rebuilt `P·V'`.
+
+```
+worst relative error over 200 cases: 3.5e-07
+```
+
+That is float32 precision — the limit of the type, not of the maths. **So the shipped code is
+verified, not merely the algorithm it was written from.** Re-run this, not just the Python one,
+after any change here:
+
+```
+gcc -O1 -o h.exe verify_head_tracking_harness.c -I../src && python verify_head_tracking_against_c.py
+```
+
 Also fixed in passing: `key_edge()`'s rising-edge slot array was `static int prev[8]` and the new
 keys index up to slot 8 — a one-past-the-end write on every frame a head-tracking key was polled.
 

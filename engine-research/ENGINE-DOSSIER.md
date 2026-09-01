@@ -265,8 +265,16 @@ near/far mapping and is the row most likely to be unusual in a given projection.
 
 `proxy-winmm/tools/verify_head_tracking.py` transcribes the algorithm and checks it against an
 independently rebuilt `P*V'` for a camera actually rotated and translated. After the fixes,
-agreement is ~1e-15; before, the relative error was **3.4**. Re-run it after any change here - this
-is maths that cannot be checked cheaply in a headset.
+agreement is ~1e-15; before, the relative error was **3.4**.
+
+**Stronger check, added on review the same day:**
+`verify_head_tracking_harness.c` compiles the **real `stereo.c`** (via `#include`, which also reaches
+its statics) and drives `apply_head_tracking()` directly, with
+`verify_head_tracking_against_c.py` comparing it to the same ground truth — **worst relative error
+3.5e-07 over 200 cases, i.e. float32 precision.** The Python check proves the *algorithm*; this one
+proves the *shipped code*. **Re-run the C one after any change here** - this is maths that cannot be
+checked cheaply in a headset, and a transcription slip is the same family of error as the two bugs
+above.
 
 ### Live knobs (all default OFF; require the VR bridge on Num0 for a pose)
 
