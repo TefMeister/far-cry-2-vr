@@ -62,3 +62,31 @@ account now have a reason to want the same OpenXR submission path proven once.
 - https://github.com/ValveSoftware/openvr/issues/1253 — re-checked 2026-09-02: still open, last activity 2019-11-23, no Valve response
 - This project's own `topics/2026-08-24-aer-steamvr-ghosting-and-cpu-readback-techniques.md`
 - `XIII2003-vr/engine-research/ENGINE-DOSSIER.md` §7 — the unverified OpenXR quad-layer host
+
+---
+
+## ✅ VERIFIED the same day — the OpenXR half is no longer a hypothesis
+
+This topic asked that the per-view pose claim be checked against the specification before anyone
+built on it. **Done, from Khronos's published `openxr.h`** `[verified-static 2026-09-02]`:
+
+- `XrCompositionLayerProjectionView` carries its **own `pose`** (`XrPosef`) and its **own `fov`**
+  (`XrFovf`), alongside its `subImage`.
+- `XrCompositionLayerProjection` holds an **array** of those views (`viewCount` + `views`), submitted
+  **together in one layer, in one `space`**.
+
+So there are no separate per-eye submission calls, and the last-call-overwrites-the-first collision
+that produces OpenVR #1253 has nowhere to occur. **Per-eye poses are expressible in OpenXR by
+construction**, and row three of the table above is now a verified option rather than a lead.
+
+**The remaining risk is narrower, and worth stating precisely:** the API allowing independent
+per-view poses is not the same as a runtime honouring them during reprojection, and SteamVR's OpenXR
+runtime shares a vendor with the unfixed OpenVR defect. That is `[reported]`, and it is an empirical
+question a headset session settles in one test — submit two views with deliberately different poses
+and see whether both are honoured.
+
+**Cross-project:** `XIII2003-vr` is the project that can run that test cheapest, since it already has
+an OpenXR host written. Its own follow-up found something relevant here too — a **quad** layer has a
+single pose and cannot carry stereo at all, so any OpenXR stereo submission must use the
+**projection** layer. Full write-up:
+`XIII2003-vr/external-research/topics/2026-09-02b-openxr-carries-a-pose-per-view-and-the-existing-host-is-the-wrong-layer-for-m2.md`.
