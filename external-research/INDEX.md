@@ -1,7 +1,7 @@
 # Research index
 
-**Last `/gr` pass: 2026-09-01 — FULL.** Inbox drained (head-tracking verdict + the sweep's console
-lead). One new topic on the `devmodeon` console unlock; the head-tracking row is now ✅ incorporated.
+**Last `/gr` pass: 2026-09-02 (estate sweep) — CHECK-IN** (board OPEN block + INDEX; no dossier or topic re-read)**.** Inbox empty. **Nothing new.** Both open rows are a headset launch at home and the AER submit work the 2026-08-24 topic already covers; yesterday's FULL pass is current. Cross-project note: its D3D9Ex/D3D11 sharing write-up was reused by Enslaved again today, and Enslaved's new `-d3d10` alternative does not apply here (Dunia is D3D9 only).
+_Previous: Last `/gr` pass: 2026-09-01 — FULL. Inbox drained (head-tracking verdict + the sweep's console lead). One new topic on the `devmodeon` console unlock; the head-tracking row is now ✅ incorporated._
 
 Every research topic gathered for this project, newest first. Each row links to a self-contained
 write-up in `topics/`. Status tags:
