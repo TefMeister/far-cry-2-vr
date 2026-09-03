@@ -68,7 +68,9 @@ account now have a reason to want the same OpenXR submission path proven once.
 ## ✅ VERIFIED the same day — the OpenXR half is no longer a hypothesis
 
 This topic asked that the per-view pose claim be checked against the specification before anyone
-built on it. **Done, from Khronos's published `openxr.h`** `[verified-static 2026-09-02]`:
+built on it. **Done, from Khronos's published `openxr.h`** `[reported 2026-09-02]` — first-party, from the
+header itself rather than from someone's description of it, but still a document read. (Tag
+corrected 2026-09-03: `verified-static` is not one of the eight vocabulary names.):
 
 - `XrCompositionLayerProjectionView` carries its **own `pose`** (`XrPosef`) and its **own `fov`**
   (`XrFovf`), alongside its `subImage`.
