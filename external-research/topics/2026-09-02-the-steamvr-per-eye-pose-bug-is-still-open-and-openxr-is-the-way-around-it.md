@@ -92,3 +92,76 @@ an OpenXR host written. Its own follow-up found something relevant here too — 
 single pose and cannot carry stereo at all, so any OpenXR stereo submission must use the
 **projection** layer. Full write-up:
 `XIII2003-vr/external-research/topics/2026-09-02b-openxr-carries-a-pose-per-view-and-the-existing-host-is-the-wrong-layer-for-m2.md`.
+
+
+---
+
+## ✏️ Corrected and extended 2026-09-04 — one date was wrong, and a partial fix was reported that this estate's hardware cannot benefit from
+
+Folded from an `/sr` inbox drop and **verified independently** against the GitHub API and the issue's
+full comment thread on 2026-09-04.
+
+### The date correction
+
+This topic and the dossier both say *"last activity 2019-11-23"*. **That is the creation date, not the
+last activity.** Read today `[verified-live 2026-09-04, n=1 API read]`:
+
+| field | value |
+| --- | --- |
+| state | `open` |
+| created | `2019-11-23T19:26:26Z` |
+| **last updated** | **`2020-04-22T17:29:00Z`** |
+| comments | 8 |
+
+The load-bearing claims survive: still open, and **no Valve or maintainer response anywhere in the
+thread** — confirmed comment by comment. Only the age wording changes, from "untouched since the day
+it was filed" to "untouched for over six years since the last community bump".
+
+### The part that is new: a partial fix, reported but never in a changelog
+
+**LukeRoss00 — the reporter, and the author of the AER technique this project borrows — posted on
+2019-12-17** `[reported 2026-09-04]`:
+
+> "Apparently this problem was fixed in one of the latest betas, but only for the lighthouse driver
+> (not for the Oculus and WMR backends)."
+
+He reiterated it on 2019-12-29 as *"to the best of my knowledge, this issue has already been fixed
+with the lighthouse driver"*. Note the hedges — *apparently*, *to the best of my knowledge*. This is a
+**second-hand community observation about a 2019 beta**, not a changelog entry and not a Valve
+statement, and SteamVR has had nearly seven years of change since. Treat its *current* truth as
+unknown rather than as a fact about today's runtime.
+
+### ⚠️ Why the obvious caution does not apply here, and what does instead
+
+The natural warning is "a test on a lighthouse headset could pass and tell you nothing about other
+backends". **On this estate that trap cannot occur, because there is no lighthouse headset.** All
+in-headset testing happens on the home PC's **Quest 3 over Virtual Desktop (VDXR / SteamVR)**
+(`claude-memory/MACHINES.md`) — not an Index-class device, and not the lighthouse driver.
+
+That inverts the reading of a live result here:
+
+- **A failure on this hardware is the expected outcome**, if the 2019 report was ever accurate and
+  still holds. It would be **weak evidence**, not a discovery, and certainly not proof that the bug is
+  universal — the one backend ever reported fixed is the one we cannot test.
+- **A pass on this hardware would be the more informative result**, because it is the non-lighthouse
+  path that was reported still broken.
+
+Either way, **record the runtime and driver name beside any per-eye pose result** — VDXR and SteamVR
+are different runtimes and Virtual Desktop supplies its own driver, so "it worked in the headset" is
+not a statement about OpenVR in general.
+
+### What does not change
+
+The design conclusion stands untouched. One shared pose remains a **constraint rather than a
+shortcut**, because the mod must hold on every runtime it could meet, and no cross-runtime workaround
+has ever been posted in that thread. The OpenXR route — a `pose` and `fov` per view in one submitted
+layer — remains the structural way around the whole question, and VDXR is itself an OpenXR runtime,
+which makes that route the natural one on this hardware rather than a fallback.
+
+### Sources for this section
+
+- https://github.com/ValveSoftware/openvr/issues/1253 — issue metadata and all 8 comments, read via
+  the GitHub API on 2026-09-04.
+- `/sr`'s inbox drop of 2026-09-04, which raised both points; the cross-engine form is in the
+  library's "OpenXR carries a pose per view" section.
+- `claude-memory/MACHINES.md` for the home PC's headset and runtime.
