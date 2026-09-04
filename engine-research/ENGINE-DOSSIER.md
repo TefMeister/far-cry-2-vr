@@ -357,6 +357,50 @@ what each outcome means: `modding-notes/2026-09-01-head-tracking-deployed-on-the
      Disable `[Events] DllEntry/TlsCallbacks/DllLoad/EntryBreakpoint/ThreadEntry`
      and/or add a first-chance ignore filter before running.
 
+### ⭐ AER STEREO IS BUILT (2026-09-04, `/pd`, no launch) — one texture per eye, and the parity contract that makes it work
+
+The bridge used to submit one mono texture to **both** eyes while the override drew **alternate
+frames from alternate eyes** — half the stereo discarded, and each eye shown the wrong view half the
+time. It now keeps `g_tex11[2]`, writes each frame into the texture for the eye it was drawn with,
+and submits both every frame. `[compile-verified 2026-09-04]`, **never run.**
+
+- **Parity is the load-bearing part.** The eye and the image are produced in different places in one
+  `Present` hook: `stereo_filter_upload()` applies eye `E_N` during frame N, `stereo_on_present()`
+  flips the wiggle to `E_(N+1)`, and only then does `vr_bridge_frame()` capture frame N. Reading the
+  wiggle state in the bridge would be **off by one and swap the eyes** — which looks like working
+  stereo with inverted depth, not like a bug. So `stereo_on_present()` **latches the completed
+  frame's eye before flipping** and the bridge reads `stereo_frame_eye()`. A frame with no per-eye
+  offset reports 0 and is treated as mono.
+- **Proven offline:** `test/aer_parity_test.c` includes the **shipped `stereo.c`**, stubs only
+  `GetAsyncKeyState`/`log_msg`/`vr_bridge_hmd_pose`, and asserts the latched eye against **the sign
+  of the offset actually written into the matrix** — 22 assertions, all passing
+  `[verified-numerically 2026-09-04]`. ⚠️ Its first version passed while testing nothing (the test
+  matrix was not classified as perspective, so every comparison was `0 == 0`); it now asserts
+  non-vacuity first. A test satisfiable by "nothing happened" is worse than no test.
+- **One shared pose for both eyes is forced, not chosen.** OpenVR cannot express two poses in one
+  frame — issue **#1253**, raised by the author of R.E.A.L. (the canonical AER implementation),
+  **re-checked 2026-09-02: still open, no Valve response, last activity 2019-11-23**
+  `[reported 2026-09-02]`. A seven-year-old untouched defect is a fixed constraint of the OpenVR
+  submission path, so the current design is correct and there is no better option on that runtime.
+- **OpenXR is the route if per-eye poses are ever needed** — its `XrCompositionLayerProjection`
+  carries a `pose` and `fov` **per view**, submitted together in one layer, so #1253's
+  last-submit-wins collision does not arise `[verified-static 2026-09-02, against the Khronos
+  header]`. ⚠️ Not available here: SteamVR ships no 32-bit OpenXR runtime and this is a 32-bit
+  process.
+- ⚠️ **Expressible is not honoured** (`/sr`, 2026-09-03). Two first-hand developer reports three
+  years apart name **opposite** runtimes as mishandling per-view poses: LukeRoss00 (2020, Valve
+  Index) saw a wrong stereo baseline and vertical eye misalignment from spec-correct per-view poses
+  and worked around it by submitting the head pose for both views plus an `fov.angleDown` swap;
+  SirKandela (2023) saw the Oculus runtime appear to ignore the pose while SteamVR respected it, and
+  Rylie Pavlik replied that a runtime truly ignoring it could not reproject at all. `[reported
+  2026-09-03]` **Do not inherit a verdict from either.** The acceptance test is the failure
+  signature — a wrong baseline **together with vertical disparity between the eyes**, which nothing
+  in a correct stereo pair produces — run with the legitimate located poses, and the runtime **name
+  and version** recorded with the result. `XIII2003-vr` is blocked on the identical question and has
+  a projection-layer path already built, so one headset run answers it for both projects.
+
+Write-up: `modding-notes/2026-09-04-aer-stereo-is-built-one-texture-per-eye-with-a-parity-test.md`.
+
 ## 12. Open risks toward the North Star
 - **32-bit address space** — a stereo/VR runtime (OpenXR/OpenVR) plus the engine
   in a 4 GB (really ~2–3 GB usable) x86 process could get memory-tight; watch
