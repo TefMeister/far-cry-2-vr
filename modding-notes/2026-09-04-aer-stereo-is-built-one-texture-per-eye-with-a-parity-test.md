@@ -52,8 +52,8 @@ bridge treats that image as mono and copies it to both eyes rather than assignin
 shortcut.** OpenVR cannot express two poses in one frame — issue #1253, raised by the author of
 R.E.A.L., the canonical AER implementation, **still open with no Valve response since 2019-11-23**
 `[reported 2026-09-02, re-checked by /gr]`. OpenXR's projection layer does carry a pose per view
-`[verified-static 2026-09-02, against the Khronos header]`, but SteamVR ships no 32-bit OpenXR
-runtime and this is a 32-bit process, so it is not available here.
+`[inferred-static 2026-09-02]`, read verbatim from the Khronos header, but SteamVR ships no 32-bit
+OpenXR runtime and this is a 32-bit process, so it is not available here.
 
 ⚠️ And per the `/sr` drop, **expressible is not honoured**: two first-hand developer reports three
 years apart name *opposite* runtimes as mishandling per-view poses. If per-eye poses are ever pursued

@@ -384,8 +384,8 @@ and submits both every frame. `[compile-verified 2026-09-04]`, **never run.**
   submission path, so the current design is correct and there is no better option on that runtime.
 - **OpenXR is the route if per-eye poses are ever needed** — its `XrCompositionLayerProjection`
   carries a `pose` and `fov` **per view**, submitted together in one layer, so #1253's
-  last-submit-wins collision does not arise `[verified-static 2026-09-02, against the Khronos
-  header]`. ⚠️ Not available here: SteamVR ships no 32-bit OpenXR runtime and this is a 32-bit
+  last-submit-wins collision does not arise `[inferred-static 2026-09-02]`, read verbatim from the
+  Khronos header. ⚠️ Not available here: SteamVR ships no 32-bit OpenXR runtime and this is a 32-bit
   process.
 - ⚠️ **Expressible is not honoured** (`/sr`, 2026-09-03). Two first-hand developer reports three
   years apart name **opposite** runtimes as mishandling per-view poses: LukeRoss00 (2020, Valve
