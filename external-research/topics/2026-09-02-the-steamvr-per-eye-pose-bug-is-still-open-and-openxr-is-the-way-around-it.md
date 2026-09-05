@@ -12,12 +12,23 @@ own pose, but SteamVR keeps only the pose from whichever `Submit` call happened 
 alternate-eye design ghosts badly on the eye submitted first. The research rules say to re-check a
 tracked source for what has changed rather than re-read it cold. So: has it moved?
 
-**No. It is still open, with no Valve response and no recorded fix.** Last activity is the original
-report, **2019-11-23** — nearly seven years. `[reported 2026-09-02]`
+**No. It is still open, and there is no Valve response anywhere in the thread.** The issue was
+**opened** 2019-11-23 and its **last activity is 2020-04-22** `[verified-live 2026-09-04, n=1 API
+read]` — untouched for over six years.
 
-That is a real finding rather than an absence. A defect that has sat untouched for seven years is not
-going to be fixed inside this project's timeframe, so **it is a fixed constraint of the OpenVR
-submission path, not a bug to wait out.**
+> ⚠️ **Read the "Corrected and extended 2026-09-04" section at the foot of this page before quoting
+> anything above.** Two claims that stood here until 2026-09-05 were wrong: *"last activity is the
+> original report, 2019-11-23 — nearly seven years"* conflated the **creation** date with the last
+> activity, and *"no recorded fix"* was too strong — the reporter posted a **hedged, lighthouse-driver-only
+> partial fix on 2019-12-17** that never reached a changelog. Both were corrected in that section on
+> 2026-09-04, but this opening paragraph was left stale and contradicted it for a day; a `/gs` drop
+> caught the mismatch on 2026-09-05 and it is fixed here now.
+
+That is a real finding rather than an absence. A defect that has sat six years without a Valve
+response, whose only reported fix is a hedged third-party observation about one driver this estate
+cannot even test on, is not going to be fixed inside this project's timeframe — so **it is a fixed
+constraint of the OpenVR submission path, not a bug to wait out.** Neither correction weakens that
+conclusion, and the AER shared-pose design resting on it is unaffected.
 
 ## The part worth noticing about who reported it
 
@@ -59,7 +70,10 @@ account now have a reason to want the same OpenXR submission path proven once.
 
 ## Sources
 
-- https://github.com/ValveSoftware/openvr/issues/1253 — re-checked 2026-09-02: still open, last activity 2019-11-23, no Valve response
+- https://github.com/ValveSoftware/openvr/issues/1253 — re-checked 2026-09-02, and re-read in full
+  via the GitHub API 2026-09-04: still open, **opened 2019-11-23, last activity 2020-04-22**, 8
+  comments, no Valve response. (The 2026-09-02 reading of this line said "last activity 2019-11-23";
+  that was the creation date — corrected 2026-09-04, and corrected here 2026-09-05.)
 - This project's own `topics/2026-08-24-aer-steamvr-ghosting-and-cpu-readback-techniques.md`
 - `XIII2003-vr/engine-research/ENGINE-DOSSIER.md` §7 — the unverified OpenXR quad-layer host
 
