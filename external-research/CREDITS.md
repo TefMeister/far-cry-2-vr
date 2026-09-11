@@ -56,6 +56,40 @@ even just inspired anything used in this project and you aren't credited
 here, please **open a GitHub issue on this repo** and we'll correct it as
 soon as possible. We would much rather over-credit than leave anyone out.
 
+## Added by the 2026-09-11 research pass
+
+For the culling and weapon-separation findings behind
+`topics/2026-09-11-vorpx-says-the-matrix-cannot-fix-culling-and-the-weapon-has-a-fix-ladder.md`:
+
+- **Ralf**, author of **vorpX**, and forum users **Eola667**, **CowPox** and **cercata** — for stating
+  on the record that head rotation cannot be decoupled from the game camera in a FullVR style, for
+  describing our exact "incomplete geometry or the void" symptom before we hit it, and for the Far Cry 2
+  specific report that DirectVR works here while weapons are "not in scale".
+- **DHR** — the HelixMod *Far Cry 2 (DX9)* 3D Vision fix (2013), including the `O`/`P` convergence
+  presets for aiming, and **DarkStarSword** for the right-mouse-held improvement in its comments and for
+  the `3d-fixes` toolchain.
+- **bo3b (Bo3b Johnson)** — *School for Shaderhackers* and the 3Dmigoto wiki, for the canonical
+  `w`-proportional stereo formula and `StereoParams`.
+- **davegl1234** and the HelixMod community — *geo-11*, for the per-draw weapon convergence approach
+  filtered by index-buffer and texture hash; binaries mirrored by **ThreeDeeJay**.
+- **LukeRoss** — the *R.E.A.L.* mod, for the hybrid architecture (game-camera rotation plus a render-time
+  view fix), the dominant-eye weapon alignment, dynamic crosshair depth, and the candid notes on FOV
+  patching breaking streaming and on the game "wrestling for camera ownership".
+- **NVIDIA GameWorks** — the `dxvk-remix` *Anti-Culling System* documentation, and its honest statement
+  of what anti-culling cannot do.
+- **praydog** — UEVR and its write-up, for the culling cvars and the `IStereoRendering` approach.
+- **cybereality / Denis Reischl** and contributors — *Vireio Perception* and VRBoost's memory-write
+  approach to camera rotation.
+- **the opentrack contributors** — issues #113, #120 and #803, for the documented failure modes of
+  mouse-emulated head tracking.
+- **DR-89** — *fear-vr*; **BerZerker96** — the *6DOF Head-Tracking Mods Hub*; **fholger (Holger
+  Frydrych)** — the Far Cry 1 VR mod.
+- **FoxAhead** — *Far Cry 2 Multi Fixer*, for the runtime Dunia memory-patching precedent.
+- **Crytek**, and **Carl Jones** and **Sean Patrick Tracy** (GDC Online 2010) — for CryEngine 3's
+  near-geometry stereo handling, which shows a shipping engine choosing to move the weapon.
+- **Flax Engine** documentation, and the Unreal and gamedev.net community threads on viewmodel FOV and
+  Z-clipping.
+
 ## Respecting creators
 
 This project exists because other people generously shared their
