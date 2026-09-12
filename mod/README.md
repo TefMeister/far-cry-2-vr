@@ -15,22 +15,30 @@ headset via SteamVR.
   submits it to the SteamVR compositor from inside the 32-bit game process, so
   the game screen appears in a connected headset.
 
+**New in v0.2.0-alpha — the first headset run (2026-09-10):**
+
+- It **is** stereoscopic 3D in the headset now: left and right eyes are
+  submitted in matched pairs.
+- **Head rotation works** — turning your head turns the picture.
+
 **What it is NOT (yet):**
 
-- It is **not stereoscopic 3D in the headset** — the headset currently shows
-  the same flat image to both eyes (mono), stretched across each eye's view.
-- It has **no head tracking** — moving your head does not move the in-game
-  camera yet.
+- **Nothing behind you is drawn.** The engine still decides what to draw from
+  the mouse camera, so looking over your shoulder shows only ground and sky
+  until you turn with the mouse. This is the number-one job.
+- **The weapon has the wrong eye separation** — you see two guns at a realistic
+  IPD — and world scale cannot be judged until that is fixed.
 - It is **not a finished, playable VR experience**, and it does not change the
   game's controls, HUD, or comfort options in any way.
 
 ## 🤢 Caution: unfinished — may cause severe motion sickness
 
 This mod is **unfinished** and in active development. Using it in a headset may
-cause **severe motion sickness and discomfort**: the image is un-tracked (it
-does not respond to your head), monoscopic, and stretched. Try it seated, take
-it off at the first sign of discomfort, and treat every release as an
-experiment until this caution is removed.
+cause **severe motion sickness and discomfort**: anything behind you is simply
+not drawn, so turning your head reveals empty ground and sky, and the weapon is
+drawn at the wrong depth. Try it seated, take it off at the first sign of
+discomfort, and treat every release as an experiment until this caution is
+removed.
 
 ## Requirements
 
