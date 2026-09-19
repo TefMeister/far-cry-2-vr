@@ -357,6 +357,34 @@ what each outcome means: `modding-notes/2026-09-01-head-tracking-deployed-on-the
      Disable `[Events] DllEntry/TlsCallbacks/DllLoad/EntryBreakpoint/ThreadEntry`
      and/or add a first-chance ignore filter before running.
 
+### ⚠️ WHY A KNOWN-FALSE CLAIM SURVIVED FOUR FLAGS IN FIFTEEN DAYS (recorded 2026-09-19)
+
+Not a Far Cry 2 fact, but the reason a Far Cry 2 fact stayed wrong — and it will repeat elsewhere
+unless it is written down where the next reader is.
+
+The #1253 date was corrected by `/gr` on **2026-09-04**, and re-flagged by `/gs` on **09-05**,
+**09-07** and **09-19**. Every one of those was a **new file in this inbox**. None of them changed
+the dossier, because **an inbox drop is a request, and the only thing that fulfils it is somebody
+draining it.** Three things made that unlikely:
+
+1. **A correction looks exactly like a contribution.** The drain reads a folder of files and folds
+   them in; nothing marks one as *"a sentence currently in your dossier is false"* rather than
+   *"here is something new"*. The 09-05 bundle was **half-drained** for precisely this reason — its
+   tag half was applied and its date half was not, and nobody noticed for two days.
+2. **Volume hides it.** This repo carried five undrained drops; the estate carried thirty. A live
+   falsehood was reported at the same volume as a research note.
+3. **Age is the wrong alarm.** `/gs` check 1's original signal was *"this drop is N days old"*, which
+   says nothing about whether the owner has been here. The `STALLED` flag was added on 2026-09-07
+   precisely because of this file — it asks whether the owner has **committed to this repo since the
+   drop landed** — and all five drops here were stalled by the time it existed.
+
+**⭐ The cure, applied 2026-09-19: check whether the falsehood is STILL LIVE, not whether the drop is
+still pending.** A correction that names the exact false string can be verified mechanically — read
+the target file, look for the string, and report it as a **live falsehood** rather than as an
+undrained file. That is the difference between a nudge and a fact, and it is now
+`tools/inbox-correction-scan.py` in the lanes plugin. **A drop that says what is wrong, verbatim, is
+worth more than one that only says what is right.**
+
 ### ⭐ AER STEREO IS BUILT (2026-09-04, `/pd`, no launch) — one texture per eye, and the parity contract that makes it work
 
 The bridge used to submit one mono texture to **both** eyes while the override drew **alternate
@@ -379,13 +407,29 @@ and submits both every frame. `[compile-verified 2026-09-04]`, **never run.**
   non-vacuity first. A test satisfiable by "nothing happened" is worse than no test.
 - **One shared pose for both eyes is forced, not chosen.** OpenVR cannot express two poses in one
   frame — issue **#1253**, raised by the author of R.E.A.L. (the canonical AER implementation),
-  **re-checked 2026-09-02: still open, no Valve response, last activity 2019-11-23**
-  `[reported 2026-09-02]`. A seven-year-old untouched defect is a fixed constraint of the OpenVR
-  submission path, so the current design is correct and there is no better option on that runtime.
+  **re-checked 2026-09-02: still open, no Valve response, last activity 2020-04-22**
+  `[verified-numerically 2026-09-04, read from the issue's own API response: `updated_at`
+  `2020-04-22T17:29:00Z`]`. ⚠️ **Corrected 2026-09-19** — this clause read *"last activity
+  2019-11-23"* and called the defect *"seven-year-old untouched"* from 2026-09-02 until today. Both
+  were wrong, and the second was load-bearing: **"untouched" was the evidence** for treating #1253 as
+  a settled constraint, and the 2020-04-22 date **is** a community bump. **The conclusion survives the
+  correction** — an issue open since 2019 whose only movement in six years is one community bump, with
+  no Valve response, is still a fixed constraint of the OpenVR submission path, so the current design
+  remains correct and there is still no better option on that runtime. But it is now justified by what
+  was actually measured. Flagged by `/gr` on 2026-09-04 and by `/gs` on 09-05, 09-07 and 09-19 before
+  it was drained; see §11 "Dead ends" for why it survived four flags.
 - **OpenXR is the route if per-eye poses are ever needed** — its `XrCompositionLayerProjection`
   carries a `pose` and `fov` **per view**, submitted together in one layer, so #1253's
-  last-submit-wins collision does not arise `[inferred-static 2026-09-02]`, read verbatim from the
-  Khronos header. ⚠️ Not available here: SteamVR ships no 32-bit OpenXR runtime and this is a 32-bit
+  last-submit-wins collision does not arise `[reported 2026-09-02]` — read verbatim from Khronos's
+  own published `openxr.h`: first-party, but a document read rather than a measurement. ⚠️ **Retagged
+  2026-09-19 from `[inferred-static]`**, to agree with the cross-engine library, which corrected the
+  identical sentence on 2026-09-03. The library's reasoning, accepted here on its merits: reading a
+  published specification header involves **no inference step** — the header *states* the field — so
+  what limits the claim is not analysis quality but that a document is not a measurement.
+  `[inferred-static]` on this estate has consistently meant *inferred from a binary or shipped data
+  file*, which this is not. The same sentence also appears on `XIII2003-vr`, verified independently
+  against the header the same day.
+  ⚠️ **Whether a runtime honours per-view poses is a separate and still-open question.** ⚠️ Not available here: SteamVR ships no 32-bit OpenXR runtime and this is a 32-bit
   process.
 - ⚠️ **Expressible is not honoured** (`/sr`, 2026-09-03). Two first-hand developer reports three
   years apart name **opposite** runtimes as mishandling per-view poses: LukeRoss00 (2020, Valve
@@ -400,6 +444,90 @@ and submits both every frame. `[compile-verified 2026-09-04]`, **never run.**
   a projection-layer path already built, so one headset run answers it for both projects.
 
 Write-up: `modding-notes/2026-09-04-aer-stereo-is-built-one-texture-per-eye-with-a-parity-test.md`.
+
+### ⭐⭐ DECOUPLING HEAD ROTATION FROM THE GAME CAMERA IS A CLOSED ROUTE — and the industry's own injector says so (drained 2026-09-19, from a 2026-09-11 `/gr` drop)
+
+**Record this as closed rather than re-derived.** On the vorpX forum thread *Decouple Head Rotation
+From Mouse Movement*, a user describes our exact symptom unprompted (2020-05-08): forcing camera
+rotation independently of the game's camera means *"by turning around you'd see either severely
+incomplete geometry or the void"*, because the game only renders geometry in the original camera's
+view. In the same thread **Ralf, vorpX's developer, states that decoupling head rotation from the
+game camera "isn't really possible to do this with the FullVR play style"** `[reported 2026-09-11,
+source dated 2020-05-04]`. vorpX maps head rotation to **mouse movement** instead.
+
+**The three routes, and what each actually buys:**
+
+| route | what it is | what it costs |
+| --- | --- | --- |
+| **(a) synthetic mouse delta** | vorpX's own fallback when DirectVR is unavailable | games that recentre the cursor each frame **spin uncontrollably** against absolute positioning — inject *relative* deltas, never `SetCursorPos`; emulation **seizes the mouse**, so head-look and mouse-aim become one axis by design; jitter survives smoothing; and the mapping is **non-linear** (45° of head reported as 50–60° in game), so it is open-loop and wants a correction term. From opentrack's issue tracker (#113, #120, #803, 2014–2019) `[reported]` |
+| **(b) write camera rotation in memory** | what vorpX DirectVR is, and what Vireio's VRBoost does per game | Ralf calls finding the address *"a fairly complex matter"* with a real chance of failure |
+| **(c) relax the culling** | **peripheral slack only.** NVIDIA RTX Remix's Anti-Culling System is the reference design | **its own docs state it cannot conjure draw calls the game never submitted**, and cannot know whether a game culls by frustum, octree or something bespoke |
+
+**⭐ The known-good architecture is HYBRID, and it matches what this dossier already says.** R.E.A.L.
+ties in-game camera **yaw to headset relative yaw** and **pitch to headset absolute pitch**, then
+applies a supplementary view fix at render time; fear-vr (LithTech, active 2026) rotates the game
+camera, preserves physical pitch and roll, then renders twice per eye. **Coarse rotation into the
+game's camera, residual and per-eye at render time** — the same split as the existing "do not rotate
+twice" rule.
+
+⚠️ **The write must be re-asserted every frame, not issued once**, and **after** the engine's own
+camera update rather than on a timer. R.E.A.L.'s README carries fixed-yaw handling for cases *"where
+the game wrestles for camera ownership"* — direct evidence the game fights back `[inferred-static
+2026-09-11]`.
+
+### ⭐ THE WEAPON NEEDS ITS OWN SEPARATION, AND THERE IS A CHEAP SECOND RUNG (drained 2026-09-19)
+
+**Why one separation cannot serve both.** The stereo correction the whole HelixMod/3Dmigoto ecosystem
+rests on is a clip-space shift **proportional to `w`**:
+`clip.x += EyeSign * Separation * (clip.w − Convergence)` `[reported]`. **`w` comes from whichever
+projection drew that geometry** — and a viewmodel is rendered in a separate pass with its **own FOV
+and a much nearer near-plane** so it does not clip into walls. **So a separation that fuses a 20 m
+wall drives a 40 cm gun past the fusion limit.** That is this project's two-guns defect, and it is
+why lowering separation helped without resolving it.
+
+The ladder, cheapest rung first:
+
+1. **Lower global convergence** — HelixMod's Crysis pages say it must be *"quite low"* or the weapon
+   looks too close. **Flattens the world**: the wall this project already hit.
+2. **⭐ Hotkeyed low-separation preset while AIMING — implementable now, on a key we already own.**
+   **DHR's own 2013 Far Cry 2 3D-Vision fix binds `O` (low, for aiming) and `P` (normal)**, and
+   DarkStarSword's 2014 improvement switches convergence while the right mouse button is held.
+3. **Per-draw override** filtered by shader / index-buffer / texture hash — geo-11's notes describe
+   exactly this for a weapon, *"heavily filtered … to not break other things"*, with honest residual
+   bugs on two or three textures.
+4. **Move the weapon instead of correcting it.** R.E.A.L. pushes weapon models away from the eye
+   camera and aligns them with the dominant eye (hotkey `T`), with dynamic crosshair depth.
+   **CryEngine 3 shipped this natively** (`r_StereoNearGeoScale`, GDC Online 2010) ⚠️ read via
+   search-index snippets, so weaker sourcing.
+
+⚠️ **No authoritative source was found for any named VR mod simply HIDING the weapon.** Folklore as
+far as that search reached.
+
+### ⭐ FAR CRY 2 / DUNIA PRIOR ART THAT CHANGES THE COST ESTIMATE (drained 2026-09-19)
+
+- **vorpX DirectVR reportedly WORKS in Far Cry 2** — a user (2020-07-29) reports it functioning, but
+  only from *"bed saves"* not menu saves, **and that weapons are "not in scale with the rest of game
+  elements"**, plus black bands `[reported]`. **Two consequences:** route (b) is **not speculative on
+  this engine** — something already finds a Dunia camera-rotation address — and **our weapon defect
+  is an already-known vorpX symptom in this exact game**, not a novel finding.
+- **HelixMod's Far Cry 2 (DX9) 3D-Vision fix** — DHR, 2013-01-04: fixes the crosshair and effects,
+  unmaintained, still up. ⚠️ **It does not claim to fix the weapon model**, which is consistent with
+  rungs 1–2 being enough under 3D Vision.
+- **⚠️ Far Cry 2 Multi Fixer** (FoxAhead) injects `FarCry2MF.dll` and **patches Dunia in process
+  memory at runtime rather than editing files, explicitly to survive Steam integrity checks**.
+  **Worth reading before we patch anything — both a precedent and a collision check.**
+- **Cheap static check, not yet run:** community reports place an `fFOV` desired-FOV multiplier in
+  **`25_cameras.xml`** in Dunia game data `[reported, unverified]`. One look at the archives confirms
+  or kills it.
+
+⚠️ **No public Far Cry 2 VR mod exists** beyond the vorpX profile, and **no published Dunia camera
+yaw/pitch addresses or view-matrix offsets** were found — route (b) has an existence proof and no
+published coordinates. fholger's open-source **Far Cry 1 VR mod is NOT transferable**: it builds
+against the CryEngine Mod SDK with engine-level access.
+
+⚠️ **Cross-project, recorded here to avoid a duplicate drop:** nothing public was found on **Unreal
+Engine 2** camera or culling in a VR-injection context — UEVR's cvar approach is UE4/5 only. That
+bounds what `psychonauts-vr` and `XIII2003-vr` should expect from searching.
 
 ## 12. Open risks toward the North Star
 - **32-bit address space** — a stereo/VR runtime (OpenXR/OpenVR) plus the engine
