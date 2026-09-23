@@ -102,3 +102,8 @@ please tell us: **open a GitHub issue on this repo**. We'll act on that
 request promptly — no argument, no delay — and we'll find another way to get
 the job done that doesn't rely on your material. This is your work; we're
 just grateful to have learned from it.
+
+## Sources (2026-09-23)
+
+- **phunkaeg**, VR Modding Playbook — https://github.com/phunkaeg/vr-modding-playbook
+- **MonsterDeadWood**, FC2VR, as studied in the playbook
