@@ -547,3 +547,8 @@ bounds what `psychonauts-vr` and `XIII2003-vr` should expect from searching.
 *Recon method: static PE analysis (`objdump`, `pefile`) + string mining of
 `Dunia.dll`, plus `GamerProfile.xml` inspection. No dynamic analysis performed
 yet. Full 404-export dump in [`dunia-exports.txt`](dunia-exports.txt).*
+
+## Inbox folds, 2026-09-29
+
+**Leads from phunkaeg's VR Modding Playbook (2026-09-23).** Two other Far Cry 2 VR projects are studied there: phunkaeg's own FarCry2-vr (Dunia, D3D10, headset-accepted stereo and hands) and MonsterDeadWood's FC2VR (D3D9, same-frame stereo, motion-controller hands); the latter documents the culling sphere and seam against the GOG `Dunia.dll` (side planes vs depth planes, a side-only binocular widening) `[reported]`. Addresses are GOG-build leads, not offsets to paste. The project is paused for these (WATCHING.md). Source: github.com/phunkaeg/vr-modding-playbook (credit phunkaeg).
+
