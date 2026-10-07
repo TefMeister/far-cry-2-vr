@@ -1,6 +1,8 @@
 # Research index
 
-**Last `/gr` pass: 2026-10-04 (estate sweep, second pass) — CHECK-IN.** PAUSED (another VR mod). Watch check: the playbook repo unchanged since 2026-09-20. Nothing new.
+**Last `/gr` pass: 2026-10-07 (estate sweep) — CHECK-IN.** PAUSED (another VR mod). Watch check: neither FC2 VR mod has a public repo (both 404); drop sent to the dossier inbox.
+
+_Previous: **Last `/gr` pass: 2026-10-04 (estate sweep, second pass) — CHECK-IN.** PAUSED (another VR mod). Watch check: the playbook repo unchanged since 2026-09-20. Nothing new._
 
 _Previous: **Last `/gr` pass: 2026-09-29 (estate sweep) — CHECK-IN.** Inbox empty; paused. The two watched Far Cry 2 VR projects still have no public repo, and the VR Modding Playbook has had no push since 2026-09-20. Nothing new._
 
