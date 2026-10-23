@@ -51,7 +51,7 @@ status line for the live verdict.
 
 This project builds on community reverse-engineering knowledge of the Far Cry /
 Dunia engine. If you contributed knowledge, tooling, or inspiration and aren't
-credited, email **(an issue on this repository)** and we'll fix it promptly. We honour
+credited, open an issue on this repository and we'll fix it promptly. We honour
 correction and removal requests from the rights holders of anything referenced
 here.
 
