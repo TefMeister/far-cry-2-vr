@@ -1,6 +1,8 @@
 # Research index
 
-**Last `/gr` pass: 2026-10-11 (estate sweep) — CHECK-IN.** Inbox empty. Re-checked the other VR mod on WATCHING.md: no change since the row was last updated. Nothing new.
+**Last `/gr` pass: 2026-10-23 (estate sweep) — CHECK-IN.** Inbox empty. Re-checked the other VR mod on WATCHING.md: phunkaeg's FarCry2-vr is still not public (404); the playbook's 2026-10-21 update names no game. Nothing new.
+
+_Previous: **Last `/gr` pass: 2026-10-11 (estate sweep) — CHECK-IN.** Inbox empty. Re-checked the other VR mod on WATCHING.md: no change since the row was last updated. Nothing new._
 
 _Previous: **Last `/gr` pass: 2026-10-07 (estate sweep) — CHECK-IN.** PAUSED (another VR mod). Watch check: neither FC2 VR mod has a public repo (both 404); drop sent to the dossier inbox._
 
