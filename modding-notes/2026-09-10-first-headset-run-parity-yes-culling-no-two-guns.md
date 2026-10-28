@@ -1,6 +1,6 @@
 # 2026-09-10 — first headset run: parity yes, head rotation yes, culling no, two guns
 
-Home PC `RTX`, Quest 3 over Virtual Desktop → SteamVR, the proxy's own OpenVR bridge
+Home PC, Quest 3 over Virtual Desktop → SteamVR, the proxy's own OpenVR bridge
 submitting the captured backbuffer per eye. Tefa driving, one launch, `bin\FarCry2.exe` direct.
 Build `winmm.dll` 135,168 B (`8c67162f807f`), deployed 2026-09-07.
 
