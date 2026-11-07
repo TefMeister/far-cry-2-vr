@@ -107,3 +107,7 @@ just grateful to have learned from it.
 
 - **phunkaeg**, VR Modding Playbook — https://github.com/phunkaeg/vr-modding-playbook
 - **MonsterDeadWood**, FC2VR, as studied in the playbook
+
+## Sources (2026-11-07)
+
+- **Braxus**, Far Cry 2 VR (FarCry2VR) — https://github.com/Braxusx/FarCry2VR
