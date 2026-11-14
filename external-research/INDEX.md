@@ -1,6 +1,8 @@
 # Research index
 
-**Last `/gr` pass: 2026-11-07 (estate sweep) — CHECK-IN.** Inbox empty. NEW: Braxus's FarCry2VR, a public, released Far Cry 2 VR mod (v1.0.3.1, 2026-10-25; test builds 2026-11-06) with native stereo and full motion controls; one topic, a watch-list drop to the dossier inbox, and a cross-engine drop on its shared culling camera and shadows. phunkaeg's FarCry2-vr still 404.
+**Last `/gr` pass: 2026-11-14 (check-ins beside the Keeper's sweep of the same day) — CHECK-IN.** Inbox empty; watch check: Braxus's FarCry2VR is still at v1.0.4 (2026-11-08), unchanged. Nothing new.
+
+_Previous: **Last `/gr` pass: 2026-11-07 (estate sweep) — CHECK-IN.** Inbox empty. NEW: Braxus's FarCry2VR, a public, released Far Cry 2 VR mod (v1.0.3.1, 2026-10-25; test builds 2026-11-06) with native stereo and full motion controls; one topic, a watch-list drop to the dossier inbox, and a cross-engine drop on its shared culling camera and shadows. phunkaeg's FarCry2-vr still 404._
 
 _Previous: **Last `/gr` pass: 2026-10-27 (estate sweep) — CHECK-IN.** Inbox empty. Watch check: phunkaeg's FarCry2-vr still not public (404); the playbook last moved 2026-10-21. Nothing new._
 
